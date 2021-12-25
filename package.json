@@ -1,7 +1,7 @@
 {
   "name": "uparm-automation",
   "version": "0.0.0",
-  "license": "MIT",
+  "author": "Anton Zakharov",
   "scripts": {
     "start": "nx serve",
     "build": "nx build",

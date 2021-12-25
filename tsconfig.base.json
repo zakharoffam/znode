@@ -14,7 +14,13 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@uparm-automation/auth/auth-api": ["libs/auth/auth-api/src/index.ts"],
+      "@uparm-automation/auth/auth-interfaces": [
+        "libs/auth/auth-interfaces/src/index.ts"
+      ],
+      "@uparm-automation/auth/auth-web": ["libs/auth/auth-web/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

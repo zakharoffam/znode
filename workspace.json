@@ -1,6 +1,10 @@
 {
   "version": 2,
   "projects": {
-    "api": "apps/api"
+    "api": "apps/api",
+    "auth-auth-api": "libs/auth/auth-api",
+    "auth-auth-interfaces": "libs/auth/auth-interfaces",
+    "auth-auth-web": "libs/auth/auth-web",
+    "web": "apps/web"
   }
 }

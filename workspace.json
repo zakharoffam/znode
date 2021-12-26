@@ -5,6 +5,7 @@
     "auth-auth-api": "libs/auth/auth-api",
     "auth-auth-interfaces": "libs/auth/auth-interfaces",
     "auth-auth-web": "libs/auth/auth-web",
+    "databases": "libs/databases",
     "web": "apps/web"
   }
 }

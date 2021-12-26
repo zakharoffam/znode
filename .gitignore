@@ -1,11 +1,16 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# ENV
+.env
+*.env
+
 # compiled output
 /dist
 /tmp
 /out-tsc
 
 # dependencies
+package-lock.json
 /node_modules
 
 # IDEs and editors

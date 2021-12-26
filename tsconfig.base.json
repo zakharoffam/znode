@@ -19,7 +19,8 @@
       "@uparm-automation/auth/auth-interfaces": [
         "libs/auth/auth-interfaces/src/index.ts"
       ],
-      "@uparm-automation/auth/auth-web": ["libs/auth/auth-web/src/index.ts"]
+      "@uparm-automation/auth/auth-web": ["libs/auth/auth-web/src/index.ts"],
+      "@uparm-automation/databases": ["libs/databases/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

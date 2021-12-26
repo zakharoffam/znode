@@ -1,24 +1,26 @@
+import { Suspense, lazy } from "react";
+import { Routes, Route, Link } from "react-router-dom";
 import styles from './app.module.css';
-import { useState } from "react";
-import { AuthWeb } from "@uparm-automation/auth/auth-web";
+
+const HomeWeb = lazy(() => import('@uparm-automation/home/home-web'));
 
 export function App() {
-  const [login, setLogin] = useState<string>('');
-
   return (
-    <div className={styles['root']}>
-      <div className={styles['auth']}>
-        <input
-          aria-label="login"
-          type="text"
-          value={login}
-          onChange={(event) => setLogin(event.target.value)}
-        />
-        <AuthWeb login={login}>
-          <p className={styles['welcome']}>Welcome Web</p>
-          <span>Test</span>
-        </AuthWeb>
-      </div>
+    <div className={styles['app']}>
+      <Link to="/">Home</Link>
+      <Link to="test">Test</Link>
+      <Link to="/notFound">Not found</Link>
+      <Suspense fallback={<h4>Загрузка...</h4>}>
+      <Routes>
+          <Route path="/" element={<HomeWeb />} />
+          <Route path="test" element={<h1>Test</h1>} />
+          <Route path="*" element={(
+            <div>
+              <h1>Страница не найдена</h1>
+            </div>
+          )} />
+      </Routes>
+      </Suspense>
     </div>
   );
 }

@@ -6,6 +6,9 @@
     "auth-auth-interfaces": "libs/auth/auth-interfaces",
     "auth-auth-web": "libs/auth/auth-web",
     "databases": "libs/databases",
+    "home-home-api": "libs/home/home-api",
+    "home-home-interfaces": "libs/home/home-interfaces",
+    "home-home-web": "libs/home/home-web",
     "web": "apps/web"
   }
 }

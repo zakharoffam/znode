@@ -1,0 +1,23 @@
+{
+  "root": "libs/home/home-interfaces",
+  "sourceRoot": "libs/home/home-interfaces/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/home/home-interfaces/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/home/home-interfaces"],
+      "options": {
+        "jestConfig": "libs/home/home-interfaces/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

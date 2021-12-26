@@ -1,4 +1,4 @@
-.root {
+.app {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -6,12 +6,4 @@
   margin: 0;
   padding: 0;
   background-color: antiquewhite;
-}
-
-.welcome {
-  margin: auto;
-}
-
-.auth {
-  margin: auto;
 }

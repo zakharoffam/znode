@@ -20,7 +20,12 @@
         "libs/auth/auth-interfaces/src/index.ts"
       ],
       "@uparm-automation/auth/auth-web": ["libs/auth/auth-web/src/index.ts"],
-      "@uparm-automation/databases": ["libs/databases/src/index.ts"]
+      "@uparm-automation/databases": ["libs/databases/src/index.ts"],
+      "@uparm-automation/home/home-api": ["libs/home/home-api/src/index.ts"],
+      "@uparm-automation/home/home-interfaces": [
+        "libs/home/home-interfaces/src/index.ts"
+      ],
+      "@uparm-automation/home/home-web": ["libs/home/home-web/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

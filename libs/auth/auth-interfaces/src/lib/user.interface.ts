@@ -1,5 +1,13 @@
 export interface UserInterface {
-  readonly id: string;
-  readonly login: string;
-  readonly name: string;
+  id: string;
+
+  email: string;
+
+  firstName: string;
+
+  lastName: string;
+
+  middleName: string;
+
+  fullName: string;
 }

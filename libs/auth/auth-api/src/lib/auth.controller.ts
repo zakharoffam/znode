@@ -1,18 +1,20 @@
-import { Controller, Get, Param, UnauthorizedException } from "@nestjs/common";
-import { UserInterface } from "../../../auth-interfaces/src";
+import { Body, Controller, Inject, Post } from "@nestjs/common";
+import { SignInDto, SignUpDto, UserInterface } from "../../../auth-interfaces/src";
+import AuthService from "./auth.service";
 
 @Controller('auth')
 export default class AuthController {
-  @Get('/:login')
-  private async auth(@Param('login') login: string): Promise<UserInterface> {
-    if (login !== 'zakharoffam') {
-      throw new UnauthorizedException();
-    }
+  constructor(@Inject(AuthService) private authService: AuthService) {}
 
-    return {
-      id: Math.random().toString(16).slice(2),
-      login: login,
-      name: 'Антон Захаров',
-    };
+
+  @Post('sign-up')
+  private async signUp(@Body() data: SignUpDto): Promise<UserInterface> {
+    return this.authService.createUser(data);
+  }
+
+
+  @Post('sign-in')
+  private async signIn(@Body() data: SignInDto): Promise<UserInterface> {
+    return this.authService.signIn(data);
   }
 }

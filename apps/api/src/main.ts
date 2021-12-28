@@ -2,6 +2,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { ConfigService } from "@nestjs/config";
+import * as session from 'express-session';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -9,13 +10,18 @@ async function bootstrap() {
   const port = await configService.get<string|number>('PORT');
   const globalPrefix = 'api';
 
-  // Устанавливаем префикс для всех эндпоинтов приложения
+  // Устанавливаем префикс для всех REST
   app.setGlobalPrefix(globalPrefix);
+
+  // Промежуточный обработчик сессий. Необходим для правильной работы модуля Auth.
+  app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  }));
 
   // Подключаем глобальный валидатор
   app.useGlobalPipes(new ValidationPipe());
-
-
 
   // Запускаем сервер
   await app.listen(port);

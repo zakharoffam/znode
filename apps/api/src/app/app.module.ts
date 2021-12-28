@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthApiModule } from "@uparm-automation/auth/auth-api";
+import { AuthModule } from "@uparm-automation/auth/auth-api";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from 'path';
 import { ConfigModule } from "@nestjs/config";
@@ -14,7 +14,7 @@ import { DatabasesModule } from "@uparm-automation/databases";
       rootPath: join(__dirname, '..', 'web')
     }),
     //DatabasesModule,
-    AuthApiModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

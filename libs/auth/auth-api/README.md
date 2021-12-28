@@ -1,7 +1,2 @@
-# auth-auth-api
+## NestJS-модуль аутентификации/авторизации пользователей
 
-This library was generated with [Nx](https://nx.dev).
-
-## Running unit tests
-
-Run `nx test auth-auth-api` to execute the unit tests via [Jest](https://jestjs.io).

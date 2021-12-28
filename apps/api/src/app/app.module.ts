@@ -13,7 +13,7 @@ import { DatabasesModule } from "@uparm-automation/databases";
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'web')
     }),
-    //DatabasesModule,
+    DatabasesModule,
     AuthModule,
   ],
   controllers: [AppController],

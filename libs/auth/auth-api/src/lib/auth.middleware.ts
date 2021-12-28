@@ -15,7 +15,6 @@ export class AuthMiddleware implements NestMiddleware {
   async use(req: any, res: any, next: NextFunction) {
     if (!req.session.cookie.user) {
       const login = req.headers['X_AUTH_USER'] ?? process.env.USER;
-      console.log(login);
       req.session.cookie.user = await this.authByLoginStrategy.strategy(login);
     }
     next();

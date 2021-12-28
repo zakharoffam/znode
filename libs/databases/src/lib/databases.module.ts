@@ -5,6 +5,9 @@ import { TypeOrmModule } from "@nestjs/typeorm";
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
+      ssl: {
+        rejectUnauthorized: false,
+      },
       host: process.env.DATABASE_UPARM_HOST,
       port: Number(process.env.DATABASE_UPARM_PORT),
       database: process.env.DATABASE_UPARM_NAME,

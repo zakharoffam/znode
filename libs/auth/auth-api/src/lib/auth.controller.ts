@@ -3,14 +3,14 @@ import { User } from "./user.decarator";
 import { UserInterface } from "@uparm-automation/auth/auth-interfaces";
 
 @Controller('auth')
-export default class AuthController {
+export class AuthController {
   /**
    * Метод возвращает данные авторизированного пользователя
-   * @url /api/auth
+   * @url /api/auth/user
    * @param user
    * @private
    */
-  @Get()
+  @Get('user')
   private getUser(@User() user: UserInterface): UserInterface {
     return user;
   }

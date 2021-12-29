@@ -1,0 +1,9 @@
+// Данный конфигурационный файл необходим для работы TypeORM CLI
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  },
+  "exclude": ["node_modules", "tmp"]
+}

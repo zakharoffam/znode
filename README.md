@@ -1,4 +1,20 @@
-# UparmAutomation
+# УПАРМ Автоматизации
+
+Для работы приложений необходимы следующие переменные среды
+
+```dotenv
+PORT=
+USER=
+SESSION_SECRET=
+
+DATABASE_UPARM_HOST=
+DATABASE_UPARM_PORT=
+DATABASE_UPARM_NAME=
+DATABASE_UPARM_USER=
+DATABASE_UPARM_PASSWORD=
+```
+
+
 
 This project was generated using [Nx](https://nx.dev).
 

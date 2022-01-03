@@ -9,6 +9,9 @@
     "home-home-api": "libs/home/home-api",
     "home-home-interfaces": "libs/home/home-interfaces",
     "home-home-web": "libs/home/home-web",
+    "users-users-api": "libs/users/users-api",
+    "users-users-interfaces": "libs/users/users-interfaces",
+    "users-users-web": "libs/users/users-web",
     "web": "apps/web"
   }
 }

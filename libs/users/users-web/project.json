@@ -1,0 +1,23 @@
+{
+  "root": "libs/users/users-web",
+  "sourceRoot": "libs/users/users-web/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/users/users-web/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/users/users-web"],
+      "options": {
+        "jestConfig": "libs/users/users-web/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

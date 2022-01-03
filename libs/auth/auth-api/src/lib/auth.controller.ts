@@ -1,6 +1,6 @@
 import { Controller, Get } from "@nestjs/common";
 import { User } from "./user.decarator";
-import { UserInterface } from "@uparm-automation/auth/auth-interfaces";
+import { UserInterface } from "@uparm-automation/users/users-interfaces";
 
 @Controller('auth')
 export class AuthController {

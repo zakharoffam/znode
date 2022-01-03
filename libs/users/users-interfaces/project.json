@@ -1,0 +1,23 @@
+{
+  "root": "libs/users/users-interfaces",
+  "sourceRoot": "libs/users/users-interfaces/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/users/users-interfaces/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/users/users-interfaces"],
+      "options": {
+        "jestConfig": "libs/users/users-interfaces/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

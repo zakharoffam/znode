@@ -6,6 +6,7 @@ import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from 'path';
 import { ConfigModule } from "@nestjs/config";
 import { DatabasesModule } from "@uparm-automation/databases";
+import { UsersApiModule } from "@uparm-automation/users/users-api";
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { DatabasesModule } from "@uparm-automation/databases";
     }),
     DatabasesModule,
     AuthModule,
+    UsersApiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

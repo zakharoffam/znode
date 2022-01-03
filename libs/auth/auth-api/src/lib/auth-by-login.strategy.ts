@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable, UnauthorizedException } from "@nestjs/c
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "@uparm-automation/databases";
 import { Repository } from "typeorm";
-import { UserInterface } from "@uparm-automation/auth/auth-interfaces";
+import { UserInterface } from "@uparm-automation/users/users-interfaces";
 
 @Injectable()
 export class AuthByLoginStrategy {

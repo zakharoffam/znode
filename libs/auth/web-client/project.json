@@ -1,0 +1,23 @@
+{
+  "root": "libs/auth/web-client",
+  "sourceRoot": "libs/auth/web-client/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/auth/web-client/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/auth/web-client"],
+      "options": {
+        "jestConfig": "libs/auth/web-client/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

@@ -2,12 +2,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from "typeorm";
 import { IsOptional, IsString, Length, MaxLength, MinLength } from "class-validator";
-import { UserMetadataEntity } from "./user-metadata.entity";
 
 @Entity('users')
 export class UserEntity {
@@ -40,9 +38,6 @@ export class UserEntity {
 
   @Column({ name: 'fullName', type: 'varchar', length: 255, nullable: false })
   fullName: string;
-
-  @OneToOne(type => UserMetadataEntity, md => md.user, { cascade: true })
-  metadata: UserMetadataEntity;
 
   @CreateDateColumn()
   createDate: Date;

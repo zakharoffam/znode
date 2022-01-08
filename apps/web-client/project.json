@@ -1,0 +1,74 @@
+{
+  "root": "apps/web-client",
+  "sourceRoot": "apps/web-client/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/web-client",
+        "index": "apps/web-client/src/index.html",
+        "baseHref": "/",
+        "main": "apps/web-client/src/main.tsx",
+        "polyfills": "apps/web-client/src/polyfills.ts",
+        "tsConfig": "apps/web-client/tsconfig.app.json",
+        "assets": [
+          "apps/web-client/src/favicon.ico",
+          "apps/web-client/src/assets"
+        ],
+        "styles": [],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/web-client/src/environments/environment.ts",
+              "with": "apps/web-client/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "web-client:build",
+        "hmr": true,
+        "proxyConfig": "apps/web-client/proxy.conf.json"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "web-client:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/web-client/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/web-client"],
+      "options": {
+        "jestConfig": "apps/web-client/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["client"]
+}

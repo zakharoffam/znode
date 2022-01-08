@@ -29,7 +29,6 @@
       }
     ]
   },
-  "defaultProject": "api",
   "generators": {
     "@nrwl/react": {
       "application": {
@@ -45,5 +44,6 @@
         "linter": "eslint"
       }
     }
-  }
+  },
+  "defaultProject": "web-client"
 }

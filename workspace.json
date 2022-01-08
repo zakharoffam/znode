@@ -1,17 +1,13 @@
 {
   "version": 2,
   "projects": {
-    "api": "apps/api",
-    "auth-auth-api": "libs/auth/auth-api",
-    "auth-auth-interfaces": "libs/auth/auth-interfaces",
-    "auth-auth-web": "libs/auth/auth-web",
+    "auth-common": "libs/auth/common",
+    "auth-server-module": "libs/auth/server-module",
+    "auth-web-client": "libs/auth/web-client",
     "databases": "libs/databases",
-    "home-home-api": "libs/home/home-api",
-    "home-home-interfaces": "libs/home/home-interfaces",
-    "home-home-web": "libs/home/home-web",
-    "users-users-api": "libs/users/users-api",
-    "users-users-interfaces": "libs/users/users-interfaces",
-    "users-users-web": "libs/users/users-web",
-    "web": "apps/web"
+    "server": "apps/server",
+    "web-client": "apps/web-client",
+    "web-client-e2e": "apps/web-client-e2e",
+    "web-error-pages": "libs/web-error-pages"
   }
 }

@@ -16,24 +16,15 @@
     "strictPropertyInitialization": false,
     "baseUrl": ".",
     "paths": {
-      "@uparm-automation/auth/auth-api": ["libs/auth/auth-api/src/index.ts"],
-      "@uparm-automation/auth/auth-interfaces": [
-        "libs/auth/auth-interfaces/src/index.ts"
+      "@uparm-automation/auth/common": ["libs/auth/common/src/index.ts"],
+      "@uparm-automation/auth/server-module": [
+        "libs/auth/server-module/src/index.ts"
       ],
-      "@uparm-automation/auth/auth-web": ["libs/auth/auth-web/src/index.ts"],
+      "@uparm-automation/auth/web-client": [
+        "libs/auth/web-client/src/index.ts"
+      ],
       "@uparm-automation/databases": ["libs/databases/src/index.ts"],
-      "@uparm-automation/home/home-api": ["libs/home/home-api/src/index.ts"],
-      "@uparm-automation/home/home-interfaces": [
-        "libs/home/home-interfaces/src/index.ts"
-      ],
-      "@uparm-automation/home/home-web": ["libs/home/home-web/src/index.ts"],
-      "@uparm-automation/users/users-api": [
-        "libs/users/users-api/src/index.ts"
-      ],
-      "@uparm-automation/users/users-interfaces": [
-        "libs/users/users-interfaces/src/index.ts"
-      ],
-      "@uparm-automation/users/users-web": ["libs/users/users-web/src/index.ts"]
+      "@uparm-automation/web-error-pages": ["libs/web-error-pages/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

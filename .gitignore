@@ -15,7 +15,6 @@ ormconfig.json
 /out-tsc
 
 # dependencies
-package-lock.json
 /node_modules
 
 # IDEs and editors

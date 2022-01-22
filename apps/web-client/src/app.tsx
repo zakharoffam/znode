@@ -1,28 +1,29 @@
-import { Box, CssBaseline, LinearProgress, ThemeProvider, Typography } from "@mui/material";
+import { CssBaseline, LinearProgress, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import { Suspense, lazy } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
-const ErrorPage = lazy(() => import('@uparm-automation/web-error-pages'));
+import { HomePage } from "./pages/home.page";
+import { NotFoundPage } from "./pages/not-found.page";
+import { ErrorHandler } from "../../../libs/web-client/error-handler/src";
+
+// const ErrorPage = lazy(() => import('@uparm-automation/web-error-pages'));
 
 export default function App() {
   return (
     <ThemeProvider theme={theme()}>
-      <CssBaseline />
-
-      <Box>
-        <Link to="/">Home</Link>
-        <Link to="test">Test</Link>
-        <Link to="/404">Not found page</Link>
-      </Box>
-
-      <Suspense fallback={<LinearProgress />}>
-        <Routes>
-          <Route path="/" element={<Typography>Home</Typography>} />
-          <Route path="test" element={<Typography>Test</Typography>} />
-          <Route path="*" element={<ErrorPage status={404} />} />
-        </Routes>
-      </Suspense>
+      {/*Перехватываем ошибки возникающие в виртуальном DOM*/}
+      <ErrorHandler name="WebClient">
+        <CssBaseline />
+        {/*Отображает прогресс-бар в момент загрузки lazy-компонентов*/}
+        <Suspense fallback={<LinearProgress />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="*" element={<NotFoundPage />} />
+            {/*<Route path="*" element={<ErrorPage status={404} />} />*/}
+          </Routes>
+        </Suspense>
+      </ErrorHandler>
     </ThemeProvider>
   );
 }

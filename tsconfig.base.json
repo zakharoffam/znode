@@ -24,7 +24,9 @@
         "libs/auth/web-client/src/index.ts"
       ],
       "@uparm-automation/databases": ["libs/databases/src/index.ts"],
-      "@uparm-automation/web-error-pages": ["libs/web-error-pages/src/index.ts"]
+      "@uparm-automation/web-client/error-handler": [
+        "libs/web-client/error-handler/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -7,6 +7,6 @@
     "databases": "libs/databases",
     "server": "apps/server",
     "web-client": "apps/web-client",
-    "web-error-pages": "libs/web-error-pages"
+    "web-client-error-handler": "libs/web-client/error-handler"
   }
 }

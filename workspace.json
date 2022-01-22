@@ -7,7 +7,6 @@
     "databases": "libs/databases",
     "server": "apps/server",
     "web-client": "apps/web-client",
-    "web-client-e2e": "apps/web-client-e2e",
     "web-error-pages": "libs/web-error-pages"
   }
 }

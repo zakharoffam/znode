@@ -1,12 +1,16 @@
 {
   "version": 2,
   "projects": {
-    "auth-common": "libs/auth/common",
-    "auth-server-module": "libs/auth/server-module",
-    "auth-web-client": "libs/auth/web-client",
-    "databases": "libs/databases",
-    "server": "apps/server",
+    "auth-module": "libs/auth/module",
+    "auth-web-pages": "libs/auth/web-pages",
+    "database": "libs/database",
+    "event-log-module": "libs/event-log/module",
+    "event-log-web-pages": "libs/event-log/web-pages",
+    "home-module": "libs/home/module",
+    "home-web-page": "libs/home/web-page",
+    "main-server": "apps/main-server",
+    "scheduler": "apps/scheduler",
     "web-client": "apps/web-client",
-    "web-client-error-handler": "libs/web-client/error-handler"
+    "web-error-interceptor": "libs/web/error-interceptor"
   }
 }

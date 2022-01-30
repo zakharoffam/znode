@@ -1,0 +1,23 @@
+{
+  "root": "libs/auth/web-pages",
+  "sourceRoot": "libs/auth/web-pages/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/auth/web-pages/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/auth/web-pages"],
+      "options": {
+        "jestConfig": "libs/auth/web-pages/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

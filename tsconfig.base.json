@@ -16,16 +16,19 @@
     "strictPropertyInitialization": false,
     "baseUrl": ".",
     "paths": {
-      "@uparm-automation/auth/common": ["libs/auth/common/src/index.ts"],
-      "@uparm-automation/auth/server-module": [
-        "libs/auth/server-module/src/index.ts"
+      "@uparm-automation/auth-module": ["libs/auth/module/src/index.ts"],
+      "@uparm-automation/auth-web-pages": ["libs/auth/web-pages/src/index.ts"],
+      "@uparm-automation/database": ["libs/database/src/index.ts"],
+      "@uparm-automation/event-log-module": [
+        "libs/event-log/module/src/index.ts"
       ],
-      "@uparm-automation/auth/web-client": [
-        "libs/auth/web-client/src/index.ts"
+      "@uparm-automation/event-log-web-pages": [
+        "libs/event-log/web-pages/src/index.ts"
       ],
-      "@uparm-automation/databases": ["libs/databases/src/index.ts"],
-      "@uparm-automation/web-client/error-handler": [
-        "libs/web-client/error-handler/src/index.ts"
+      "@uparm-automation/home/module": ["libs/home/module/src/index.ts"],
+      "@uparm-automation/home/web-page": ["libs/home/web-page/src/index.ts"],
+      "@uparm-automation/web-error-interceptor": [
+        "libs/web/error-interceptor/src/index.ts"
       ]
     }
   },

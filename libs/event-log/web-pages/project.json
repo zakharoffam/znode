@@ -1,0 +1,23 @@
+{
+  "root": "libs/event-log/web-pages",
+  "sourceRoot": "libs/event-log/web-pages/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/event-log/web-pages/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/event-log/web-pages"],
+      "options": {
+        "jestConfig": "libs/event-log/web-pages/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

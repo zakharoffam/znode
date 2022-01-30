@@ -1,0 +1,23 @@
+{
+  "root": "libs/web/error-interceptor",
+  "sourceRoot": "libs/web/error-interceptor/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/web/error-interceptor/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/web/error-interceptor"],
+      "options": {
+        "jestConfig": "libs/web/error-interceptor/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

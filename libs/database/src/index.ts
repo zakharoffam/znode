@@ -1,4 +1,6 @@
 export * from './lib/databases.module';
 
-// Сущности
-export * from './lib/entities/user.entity';
+// RBAC - Role-based access control или Управление доступом на основе ролей
+export * from './lib/entities/RBAC/user.entity';
+export * from './lib/entities/RBAC/role-type.entity';
+export * from './lib/entities/RBAC/role.entity';

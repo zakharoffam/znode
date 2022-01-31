@@ -28,11 +28,20 @@
     "rejectUnauthorized": false
   },
   "cli": {
-    "migrationsDir": "libs/database/src/lib/migration"
+    "migrationsDir": "libs/databases/src/lib/migration"
   },
-  "entities": ["libs/database/src/lib/entities/*.entity.ts", "libs/database/src/lib/entities/**/*.entity.ts"],
-  "migrations": ["libs/database/src/lib/migration/*.ts", "libs/database/src/lib/migration/**/*.ts"],
-  "subscribers": ["libs/database/src/lib/subscriber/*.ts", "libs/database/src/lib/subscriber/**/*.ts"]
+  "entities": [
+    "libs/database/src/lib/entities/*.entity.ts",
+    "libs/database/src/lib/entities/*/*.entity.ts"
+  ],
+  "migrations": [
+    "libs/database/src/lib/migration/*.ts",
+    "libs/database/src/lib/migration/**/*.ts"
+  ],
+  "subscribers": [
+    "libs/database/src/lib/subscriber/*.ts",
+    "libs/database/src/lib/subscriber/**/*.ts"
+  ]
 }
 ```
 

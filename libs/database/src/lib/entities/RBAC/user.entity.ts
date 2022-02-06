@@ -13,14 +13,10 @@ export class UserEntity {
 
   // Активен?
   @IsBoolean()
-  @Column({ name: 'active', type: 'bit', nullable: false })
-  active: boolean;
+  @Column({ name: 'isActive', type: 'bit', nullable: false })
+  isActive: boolean;
 
-  // Удален?
-  @IsOptional()
-  @IsBoolean()
-  @Column({ name: 'deleted', type: 'bit', nullable: false, default: 0 })
-  deleted: boolean;
+
 
   @CreateDateColumn()
   createDate: Date;

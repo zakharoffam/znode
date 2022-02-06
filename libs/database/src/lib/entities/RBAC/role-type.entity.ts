@@ -33,12 +33,6 @@ export class RoleTypeEntity {
 
   // Активен или нет данный тип ролей
   @IsBoolean()
-  @Column({ name: 'active', type: 'bit', nullable: false })
-  active: boolean;
-
-  // Удален?
-  @IsOptional()
-  @IsBoolean()
-  @Column({ name: 'deleted', type: 'bit', nullable: false, default: 0 })
-  deleted: boolean;
+  @Column({ name: 'isActive', type: 'bit', nullable: false })
+  isActive: boolean;
 }

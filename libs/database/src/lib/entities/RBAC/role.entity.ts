@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { IsBoolean, IsOptional, IsString, Length } from "class-validator";
+import { IsBoolean, IsString, Length } from "class-validator";
 import { RoleTypeEntity } from "./role-type.entity";
 
 @Entity('RBAC_Roles')
@@ -7,7 +7,6 @@ export class RoleEntity {
   @PrimaryGeneratedColumn({ name: 'id', type: 'int' })
   id: number;
 
-  // TODO: Добавить валидацию
   @ManyToOne(type => RoleTypeEntity, roleType => roleType.roles)
   roleType: RoleTypeEntity;
 
@@ -23,12 +22,6 @@ export class RoleEntity {
 
   // Активна
   @IsBoolean()
-  @Column({ name: 'active', type: 'bit', nullable: false })
-  active: boolean;
-
-  // Удалена?
-  @IsOptional()
-  @IsBoolean()
-  @Column({ name: 'deleted', type: 'bit', nullable: false, default: 0 })
-  deleted: boolean;
+  @Column({ name: 'isActive', type: 'bit', nullable: false })
+  isActive: boolean;
 }

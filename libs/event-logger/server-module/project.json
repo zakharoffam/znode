@@ -1,0 +1,23 @@
+{
+  "root": "libs/event-logger/server-module",
+  "sourceRoot": "libs/event-logger/server-module/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/event-logger/server-module/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/event-logger/server-module"],
+      "options": {
+        "jestConfig": "libs/event-logger/server-module/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

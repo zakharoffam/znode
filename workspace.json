@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "projects": {
+    "auth-server-module": "libs/auth/server-module",
+    "client": "apps/client",
+    "common-helpers": "libs/common/helpers",
+    "event-logger-server-module": "libs/event-logger/server-module",
+    "server": "apps/server",
+    "storage": "libs/storage"
+  }
+}

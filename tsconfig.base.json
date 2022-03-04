@@ -1,0 +1,34 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "strictPropertyInitialization": false,
+    "baseUrl": ".",
+    "paths": {
+      "@znode/auth-server-module": ["libs/auth/server-module/src/index.ts"],
+      "@znode/auth-web-pages": ["libs/auth/web-pages/src/index.ts"],
+      "@znode/common-client-error-interceptor": [
+        "libs/common/client/error-interceptor/src/index.ts"
+      ],
+      "@znode/common/helpers": ["libs/common/helpers/src/index.ts"],
+      "@znode/event-log-module": ["libs/event-log/module/src/index.ts"],
+      "@znode/event-log-web-pages": ["libs/event-log/web-pages/src/index.ts"],
+      "@znode/event-logger-server-module": [
+        "libs/event-logger/server-module/src/index.ts"
+      ],
+      "@znode/storage": ["libs/storage/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

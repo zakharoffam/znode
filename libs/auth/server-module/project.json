@@ -1,0 +1,23 @@
+{
+  "root": "libs/auth/server-module",
+  "sourceRoot": "libs/auth/server-module/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/auth/server-module/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/auth/server-module"],
+      "options": {
+        "jestConfig": "libs/auth/server-module/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

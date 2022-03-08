@@ -5,3 +5,4 @@ export * from './lib/entities/LOGGER/logger-record.entity';
 
 // COMMON - Role-based access control или Управление доступом на основе ролей
 export * from './lib/entities/COMMON/user.entity';
+export * from './lib/entities/COMMON/user-password.entity';

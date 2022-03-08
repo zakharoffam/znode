@@ -1,29 +1,30 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod, } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './auth.controller';
-import { AuthByLoginStrategy } from './auth-by-login.strategy';
 import { AuthMiddleware } from './auth.middleware';
-import { UserEntity } from "@znode/storage";
-import { PassportModule } from "@nestjs/passport";
-import { AuthLocalStrategy } from "./auth-local.strategy";
+import { UserEntity, UserPasswordEntity } from "@znode/storage";
+import { AuthService } from "./auth.service";
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity]),
-    PassportModule
+    TypeOrmModule.forFeature([UserEntity, UserPasswordEntity]),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '180s' },
+    }),
   ],
   controllers: [AuthController],
-  providers: [AuthByLoginStrategy, AuthLocalStrategy],
+  providers: [AuthService],
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
     consumer
       .apply(AuthMiddleware)
+      .exclude(
+        { path: 'auth/sign-in', method: RequestMethod.POST },
+        { path: 'auth/current-user', method: RequestMethod.GET },
+      )
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

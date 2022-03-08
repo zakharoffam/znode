@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { join } from 'path';
 
-
 const options = (isProd: boolean): TypeOrmModuleOptions => {
   if (isProd) {
     return {
@@ -22,13 +21,12 @@ const options = (isProd: boolean): TypeOrmModuleOptions => {
       autoSave: true,
       autoLoadEntities: true,
       synchronize: true,
-      retryAttempts: 3,
+      retryAttempts: 1,
       logging: 'all',
       logger: 'file',
     };
   }
 }
-
 
 @Module({
   imports: [

@@ -2,7 +2,7 @@ import { BaseEntity, Column, CreateDateColumn, Entity, OneToOne, PrimaryColumn, 
 import { IsBoolean, IsEmail, IsOptional, IsString, Length, validate } from "class-validator";
 import { BadRequestException, ForbiddenException, UnauthorizedException } from "@nestjs/common";
 import { UserPasswordEntity } from "./user-password.entity";
-import { UserInterface } from "@znode/auth-server-module";
+import { UserInterface } from "../../../../../common/interfaces/src";
 
 
 @Entity('COMMON_Users')

@@ -7,7 +7,6 @@ ormlogs.log
 # ENV and configs
 .env
 *.env
-ormconfig.json
 
 # Dev and test database
 dev.db

@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable, UnauthorizedException } from "@nestjs/common";
-import { UserInterface } from './user.interface';
+import { UserInterface } from "@znode/common/interfaces";
 import { UserEntity, UserPasswordEntity } from "@znode/storage";
 import { JwtService } from "@nestjs/jwt";
 

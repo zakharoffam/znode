@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { UserInterface } from "./user.interface";
+import { UserInterface } from "@znode/common/interfaces";
 
 /**
  * Декоратор возвращающий данные текущего пользователя

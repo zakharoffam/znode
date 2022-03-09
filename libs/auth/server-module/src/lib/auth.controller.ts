@@ -1,16 +1,11 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post, Res,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, } from '@nestjs/common';
 import { Response } from 'express';
-import { UserInterface } from './user.interface';
-import { SignInDto} from './sign-in.dto';
+import { SignInDto } from './sign-in.dto';
 import { CurrentUser } from './current-user.decarator';
 import { AuthService } from "./auth.service";
 import { UserEntity } from "@znode/storage";
 import { SignUpDto } from "./sign-up.dto";
+import { UserInterface } from "@znode/common/interfaces";
 
 @Controller('auth')
 export class AuthController {
@@ -41,8 +36,7 @@ export class AuthController {
    */
   @Post('sign-up')
   public async signUp(@Body() data: SignUpDto) {
-    const regUser = await UserEntity.createUser(data.email, data.name, data.password);
-    return regUser;
+    return await UserEntity.createUser(data.email, data.name, data.password);
   }
 
 

@@ -2,6 +2,12 @@ import { Injectable, Logger, NestMiddleware, UnauthorizedException } from '@nest
 import { NextFunction } from 'express';
 import { AuthService } from './auth.service';
 import { UserEntity } from "@znode/storage";
+import { Request, Response } from 'express';
+import { UserInterface } from "@znode/common/interfaces";
+
+interface RequestWithUser extends Request {
+  user: UserInterface;
+}
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
@@ -13,7 +19,7 @@ export class AuthMiddleware implements NestMiddleware {
    * @param res
    * @param next
    */
-  async use(req: any, res: any, next: NextFunction) {
+  async use(req: RequestWithUser, res: Response, next: NextFunction) {
     console.log(req.headers);
     const auth = req.headers['Authorization'];
     Logger.log(auth);

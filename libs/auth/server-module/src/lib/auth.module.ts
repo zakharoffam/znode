@@ -22,8 +22,8 @@ export class AuthModule implements NestModule {
     consumer
       .apply(AuthMiddleware)
       .exclude(
-        { path: 'auth/sign-in', method: RequestMethod.POST },
-        { path: 'auth/current-user', method: RequestMethod.GET },
+        { path: 'api/auth/sign-in', method: RequestMethod.POST },
+        { path: 'api/auth/sign-up', method: RequestMethod.POST },
       )
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }

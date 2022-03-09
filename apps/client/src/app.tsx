@@ -6,6 +6,7 @@ import { ErrorInterceptor } from "./error-interceptor";
 
 import { HomePage } from './pages/home.page';
 import { Error404Page } from './pages/error-404.page';
+import { AuthPage } from "./pages/auth.page";
 
 
 // const EventLogPage = lazy(
@@ -23,6 +24,7 @@ export default function App() {
         <Suspense fallback={<LinearProgress />}>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/sign-in" element={<AuthPage />} />
             {/*<Route path="/event-log" element={<EventLogPage />} />*/}
             <Route path="*" element={<Error404Page />} />
 

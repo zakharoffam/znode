@@ -1,6 +1,6 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { IsBoolean, IsEmail, IsOptional, IsString, Length, validate } from "class-validator";
-import { BadRequestException, ForbiddenException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, UnauthorizedException } from "@nestjs/common";
 import { UserPasswordEntity } from "./user-password.entity";
 import { UserInterface } from "@znode/auth-server-module";
 
@@ -68,7 +68,10 @@ export class UserEntity extends BaseEntity {
    */
   static async getUserByEmail(email: string): Promise<UserInterface> {
     const entity = await this.findOne({where: {email: email}});
-    if (!entity.isActive) {
+    if (!entity) {
+      throw new UnauthorizedException();
+    }
+    if (!entity?.isActive) {
       throw new ForbiddenException();
     }
     return {

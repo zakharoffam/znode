@@ -23,6 +23,7 @@ export class AuthService {
    */
   public async checkEmailAndPassword(email: string, password: string): Promise<UserInterface> {
     const user = await UserEntity.findOne({ where: { email: email }});
+    console.log(user);
     if (!user) {
       throw new UnauthorizedException(`${email} не зарегистрирован!`, `AuthLocalStrategy.validate()`);
     }

@@ -1,4 +1,4 @@
-import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { NextFunction } from 'express';
 import { AuthService } from './auth.service';
 import { UserEntity } from "@znode/storage";
@@ -14,7 +14,9 @@ export class AuthMiddleware implements NestMiddleware {
    * @param next
    */
   async use(req: any, res: any, next: NextFunction) {
+    console.log(req.headers);
     const auth = req.headers['Authorization'];
+    Logger.log(auth);
     if (!auth) {
       // Если в запросе нет токена авторизации отправим клиента на страницу авторизации
       throw new UnauthorizedException();

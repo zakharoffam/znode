@@ -17,7 +17,7 @@ const options = (isProd: boolean): TypeOrmModuleOptions => {
   } else {
     return {
       type: 'sqljs',
-      location: join('..', '..', '..', 'dev.db'),
+      location: join('/Users/zakharoffam/Development/Repositories/znode/dev.db'),
       autoSave: true,
       autoLoadEntities: true,
       synchronize: true,

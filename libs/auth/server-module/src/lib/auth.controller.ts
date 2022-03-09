@@ -9,6 +9,8 @@ import { UserInterface } from './user.interface';
 import { SignInDto} from './sign-in.dto';
 import { CurrentUser } from './current-user.decarator';
 import { AuthService } from "./auth.service";
+import { UserEntity } from "@znode/storage";
+import { SignUpDto } from "./sign-up.dto";
 
 @Controller('auth')
 export class AuthController {
@@ -21,14 +23,26 @@ export class AuthController {
    * @param data
    */
   @Post('sign-in')
-  public async signIn(@Body() data: SignInDto, @Res() response: Response): Promise<{ token: string, user: UserInterface }> {
+  public async signIn(@Body() data: SignInDto, @Res() response: Response) {
     const user = await this.authService.checkEmailAndPassword(data.email, data.password);
     const token = this.authService.encryptJwt(user);
     response.setHeader('Authorization', `Bearer ${token}`);
-    return {
+    response.send({
       token: token,
       user: user,
-    };
+    });
+    response.end();
+  }
+
+
+  /**
+   * Регистрация нового пользователя
+   * @param data
+   */
+  @Post('sign-up')
+  public async signUp(@Body() data: SignUpDto) {
+    const regUser = await UserEntity.createUser(data.email, data.name, data.password);
+    return regUser;
   }
 
 

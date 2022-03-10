@@ -1,7 +1,7 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { useState } from "react";
 import axios from 'axios';
-import { UserInterface } from "@znode/auth-server-module";
+import { UserInterface } from "@znode/common/interfaces";
 
 export function AuthPage() {
   const [email, setEmail] = useState('');

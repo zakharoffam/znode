@@ -26,7 +26,7 @@ async function bootstrap() {
 
   // Стартуем сервер
   await app.listen(port);
-  Logger.log(`Сервер запущен: http://localhost:${port}/${globalPrefix}`);
+  Logger.log(`Сервер запущен в режиме "${process.env.NODE_ENV}" на: http://localhost:${port}/${globalPrefix}`);
 }
 
 bootstrap().catch((err) => {

@@ -10,7 +10,7 @@ import { EventLoggerModule } from '@znode/event-logger-server-module';
   imports: [
     ConfigModule.forRoot(),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'web-client'),
+      rootPath: join(__dirname, '..', 'client'),
     }),
     StorageModule,
     AuthModule,

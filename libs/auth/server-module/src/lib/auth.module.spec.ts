@@ -37,7 +37,6 @@ describe('AuthModule', () => {
         const token = authService.encryptJwt(user);
         expect(token).toBeDefined();
         const checkToken = authService.decryptJwt(token);
-        console.log(checkToken);
         expect(checkToken).toBeDefined();
       });
     });

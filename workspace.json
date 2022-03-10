@@ -5,8 +5,8 @@
     "client": "apps/client",
     "common-helpers": "libs/common/helpers",
     "common-interfaces": "libs/common/interfaces",
-    "event-logger-server-module": "libs/event-logger/server-module",
     "server": "apps/server",
-    "storage": "libs/storage"
+    "storage": "libs/storage",
+    "users-server-module": "libs/users/server-module"
   }
 }

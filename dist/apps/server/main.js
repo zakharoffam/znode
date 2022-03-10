@@ -1,2 +1,663 @@
-(()=>{"use strict";var e={636:(e,t,r)=>{Object.defineProperty(t,"__esModule",{value:!0}),t.AppModule=void 0;const o=r(752),i=r(481),a=r(793),n=r(385),s=r(17),d=r(323),c=r(58),l=r(792);let u=class{};u=(0,o.__decorate)([(0,i.Module)({imports:[a.ConfigModule.forRoot(),n.ServeStaticModule.forRoot({rootPath:(0,s.join)(__dirname,"..","client")}),d.StorageModule,c.AuthModule,l.EventLoggerModule],controllers:[],providers:[]})],u),t.AppModule=u},58:(e,t,r)=>{Object.defineProperty(t,"__esModule",{value:!0});const o=r(752);(0,o.__exportStar)(r(540),t),(0,o.__exportStar)(r(500),t),(0,o.__exportStar)(r(965),t)},70:(e,t,r)=>{var o,i,a,n,s,d;Object.defineProperty(t,"__esModule",{value:!0}),t.AuthController=void 0;const c=r(752),l=r(481),u=r(860),p=r(965),_=r(500),g=r(984),y=r(323),v=r(732),m=r(702);let h=class{constructor(e){this.authService=e}signIn(e,t){return(0,c.__awaiter)(this,void 0,void 0,(function*(){const r=yield this.authService.checkEmailAndPassword(e.email,e.password),o=this.authService.encryptJwt(r);t.setHeader("Authorization",`Bearer ${o}`),t.send({token:o,user:r}),t.end()}))}signUp(e){return(0,c.__awaiter)(this,void 0,void 0,(function*(){return yield y.UserEntity.createUser(e.email,e.name,e.password)}))}getUser(e){return e}};(0,c.__decorate)([(0,l.Post)("sign-in"),(0,c.__param)(0,(0,l.Body)()),(0,c.__param)(1,(0,l.Res)()),(0,c.__metadata)("design:type",Function),(0,c.__metadata)("design:paramtypes",["function"==typeof(o=void 0!==p.SignInDto&&p.SignInDto)?o:Object,"function"==typeof(i=void 0!==u.Response&&u.Response)?i:Object]),(0,c.__metadata)("design:returntype",Promise)],h.prototype,"signIn",null),(0,c.__decorate)([(0,l.Post)("sign-up"),(0,c.__param)(0,(0,l.Body)()),(0,c.__metadata)("design:type",Function),(0,c.__metadata)("design:paramtypes",["function"==typeof(a=void 0!==v.SignUpDto&&v.SignUpDto)?a:Object]),(0,c.__metadata)("design:returntype",Promise)],h.prototype,"signUp",null),(0,c.__decorate)([(0,l.Get)("current-user"),(0,c.__param)(0,(0,_.CurrentUser)()),(0,c.__metadata)("design:type",Function),(0,c.__metadata)("design:paramtypes",["function"==typeof(n=void 0!==m.UserInterface&&m.UserInterface)?n:Object]),(0,c.__metadata)("design:returntype","function"==typeof(s=void 0!==m.UserInterface&&m.UserInterface)?s:Object)],h.prototype,"getUser",null),h=(0,c.__decorate)([(0,l.Controller)("auth"),(0,c.__metadata)("design:paramtypes",["function"==typeof(d=void 0!==g.AuthService&&g.AuthService)?d:Object])],h),t.AuthController=h},545:(e,t,r)=>{var o;Object.defineProperty(t,"__esModule",{value:!0}),t.AuthMiddleware=void 0;const i=r(752),a=r(481),n=r(984),s=r(323);let d=class{constructor(e){this.authService=e}use(e,t,r){var o;return(0,i.__awaiter)(this,void 0,void 0,(function*(){console.log(e.headers);const i=e.headers.Authorization;if(a.Logger.log(i),!i)throw new a.UnauthorizedException;const n=String(i).replace("Bearer ",""),d=this.authService.decryptJwt(n);if(!(null===(o=null==d?void 0:d.user)||void 0===o?void 0:o.email))throw new a.UnauthorizedException;let c=d.user;if(Date.now()>Number(String(d.exp)+"000")){c=yield s.UserEntity.getUserByEmail(d.user.email);const e=this.authService.encryptJwt(c);t.setHeader("Authorization",`Bearer ${e}`)}e.user=c,r()}))}};d=(0,i.__decorate)([(0,a.Injectable)(),(0,i.__metadata)("design:paramtypes",["function"==typeof(o=void 0!==n.AuthService&&n.AuthService)?o:Object])],d),t.AuthMiddleware=d},540:(e,t,r)=>{Object.defineProperty(t,"__esModule",{value:!0}),t.AuthModule=void 0;const o=r(752),i=r(481),a=r(399),n=r(70),s=r(545),d=r(323),c=r(984),l=r(64);let u=class{configure(e){e.apply(s.AuthMiddleware).exclude({path:"api/auth/sign-in",method:i.RequestMethod.POST},{path:"api/auth/sign-up",method:i.RequestMethod.POST}).forRoutes({path:"*",method:i.RequestMethod.ALL})}};u=(0,o.__decorate)([(0,i.Module)({imports:[a.TypeOrmModule.forFeature([d.UserEntity,d.UserPasswordEntity]),l.JwtModule.register({secret:process.env.JWT_SECRET,signOptions:{expiresIn:"180s"}})],controllers:[n.AuthController],providers:[c.AuthService]})],u),t.AuthModule=u},984:(e,t,r)=>{var o;Object.defineProperty(t,"__esModule",{value:!0}),t.AuthService=void 0;const i=r(752),a=r(481),n=r(323),s=r(64);let d=class{constructor(e){this.jwtService=e}checkEmailAndPassword(e,t){return(0,i.__awaiter)(this,void 0,void 0,(function*(){const r=yield n.UserEntity.findOne({where:{email:e}});if(console.log(r),!r)throw new a.UnauthorizedException(`${e} не зарегистрирован!`,"AuthLocalStrategy.validate()");if(!(yield n.UserPasswordEntity.isPasswordOfUser(r,t)))throw new a.UnauthorizedException("Неверный пароль!","AuthLocalStrategy.validate()");if(!r.isActive)throw new a.ForbiddenException("Доступ запрещен!","AuthLocalStrategy.validate()");return r}))}encryptJwt(e){const t={user:e};return this.jwtService.sign(t)}decryptJwt(e){return this.jwtService.verify(e)}};d=(0,i.__decorate)([(0,a.Injectable)(),(0,i.__metadata)("design:paramtypes",["function"==typeof(o=void 0!==s.JwtService&&s.JwtService)?o:Object])],d),t.AuthService=d},500:(e,t,r)=>{Object.defineProperty(t,"__esModule",{value:!0}),t.CurrentUser=void 0;const o=r(481);t.CurrentUser=(0,o.createParamDecorator)((e=>e.switchToHttp().getRequest().user))},965:(e,t,r)=>{Object.defineProperty(t,"__esModule",{value:!0}),t.SignInDto=void 0;const o=r(752),i=r(849);class a{}(0,o.__decorate)([(0,i.IsEmail)(),(0,o.__metadata)("design:type",String)],a.prototype,"email",void 0),(0,o.__decorate)([(0,i.IsString)(),(0,i.Length)(1,64),(0,o.__metadata)("design:type",String)],a.prototype,"password",void 0),t.SignInDto=a},732:(e,t,r)=>{Object.defineProperty(t,"__esModule",{value:!0}),t.SignUpDto=void 0;const o=r(752),i=r(849);class a{}(0,o.__decorate)([(0,i.IsEmail)(),(0,o.__metadata)("design:type",String)],a.prototype,"email",void 0),(0,o.__decorate)([(0,i.IsString)(),(0,i.Length)(1,255),(0,o.__metadata)("design:type",String)],a.prototype,"name",void 0),(0,o.__decorate)([(0,i.IsString)(),(0,i.Length)(1,64),(0,o.__metadata)("design:type",String)],a.prototype,"password",void 0),t.SignUpDto=a},702:(e,t,r)=>{Object.defineProperty(t,"__esModule",{value:!0}),(0,r(752).__exportStar)(r(117),t)},117:(e,t)=>{Object.defineProperty(t,"__esModule",{value:!0})},792:(e,t,r)=>{Object.defineProperty(t,"__esModule",{value:!0});const o=r(752);(0,o.__exportStar)(r(465),t),(0,o.__exportStar)(r(198),t)},440:(e,t,r)=>{var o,i,a;Object.defineProperty(t,"__esModule",{value:!0}),t.EventLoggerController=void 0;const n=r(752),s=r(481),d=r(323);let c=class{postRecord(){return(0,n.__awaiter)(this,void 0,void 0,(function*(){const e=`Тестовая запись ${Math.random().toString(32).slice(2)}`;return yield d.LoggerRecord.addRecord(d.LoggerRecordTypes.log,e,"EventLoggerController.postRecord()"),"Запись успешно добавлена."}))}getAllRecords(){return(0,n.__awaiter)(this,void 0,void 0,(function*(){return yield d.LoggerRecord.getAllRecords()}))}deleteAllRecords(){return(0,n.__awaiter)(this,void 0,void 0,(function*(){return yield d.LoggerRecord.removeAllRecords(),"Общий журнал событий полностью очищен."}))}};(0,n.__decorate)([(0,s.Get)("records/add-record"),(0,n.__metadata)("design:type",Function),(0,n.__metadata)("design:paramtypes",[]),(0,n.__metadata)("design:returntype","function"==typeof(o="undefined"!=typeof Promise&&Promise)?o:Object)],c.prototype,"postRecord",null),(0,n.__decorate)([(0,s.Get)("records"),(0,n.__metadata)("design:type",Function),(0,n.__metadata)("design:paramtypes",[]),(0,n.__metadata)("design:returntype","function"==typeof(i="undefined"!=typeof Promise&&Promise)?i:Object)],c.prototype,"getAllRecords",null),(0,n.__decorate)([(0,s.Get)("delete"),(0,n.__metadata)("design:type",Function),(0,n.__metadata)("design:paramtypes",[]),(0,n.__metadata)("design:returntype","function"==typeof(a="undefined"!=typeof Promise&&Promise)?a:Object)],c.prototype,"deleteAllRecords",null),c=(0,n.__decorate)([(0,s.Controller)("event-logger")],c),t.EventLoggerController=c},465:(e,t,r)=>{Object.defineProperty(t,"__esModule",{value:!0}),t.EventLoggerModule=void 0;const o=r(752),i=r(481),a=r(399),n=r(323),s=r(198),d=r(440);let c=class{};c=(0,o.__decorate)([(0,i.Module)({imports:[a.TypeOrmModule.forFeature([n.LoggerRecord])],controllers:[d.EventLoggerController],providers:[s.EventLoggerService],exports:[s.EventLoggerService]})],c),t.EventLoggerModule=c},198:(e,t,r)=>{Object.defineProperty(t,"__esModule",{value:!0}),t.EventLoggerService=void 0;const o=r(752),i=r(481),a=r(323);let n=class extends i.ConsoleLogger{log(e,t){a.LoggerRecord.addRecord(a.LoggerRecordTypes.log,e,t).catch((e=>{i.Logger.error(e.message,"EventLoggerService.log()")}))}error(e,t,r){a.LoggerRecord.addRecord(a.LoggerRecordTypes.error,e,r).catch((e=>{i.Logger.error(e.message,"EventLoggerService.error()")}))}warn(e,t){a.LoggerRecord.addRecord(a.LoggerRecordTypes.warn,e,t).catch((e=>{i.Logger.error(e.message,"EventLoggerService.warn()")}))}debug(e,t){a.LoggerRecord.addRecord(a.LoggerRecordTypes.debug,e,t).catch((e=>{i.Logger.error(e.message,"EventLoggerService.debug()")}))}verbose(e,t){a.LoggerRecord.addRecord(a.LoggerRecordTypes.verbose,e,t).catch((e=>{i.Logger.error(e.message,"EventLoggerService.verbose()")}))}};n=(0,o.__decorate)([(0,i.Injectable)()],n),t.EventLoggerService=n},323:(e,t,r)=>{Object.defineProperty(t,"__esModule",{value:!0});const o=r(752);(0,o.__exportStar)(r(4),t),(0,o.__exportStar)(r(293),t),(0,o.__exportStar)(r(285),t),(0,o.__exportStar)(r(193),t)},193:(e,t,r)=>{var o,i;Object.defineProperty(t,"__esModule",{value:!0}),t.UserPasswordEntity=void 0;const a=r(752),n=r(250),s=r(38),d=r(285),c=r(481);let l=o=class extends n.BaseEntity{static setPassword(e,t){return(0,a.__awaiter)(this,void 0,void 0,(function*(){if(t.length<8||t.length>64)throw new c.BadRequestException("Длина пароля должна быть от 8 до 64 символов!","UserPasswordEntity.setPassword()");let r=yield this.findOne({where:{user:e}});if(r)return r.passwordHashed=yield s.hash(t),void(yield this.save(r));r=new o,r.user=e,r.passwordHashed=yield s.hash(t)}))}static isPasswordOfUser(e,t){return(0,a.__awaiter)(this,void 0,void 0,(function*(){const r=yield this.findOne({where:{user:e}});return!!r&&(yield s.verify(r.passwordHashed,t))}))}};(0,a.__decorate)([(0,n.PrimaryGeneratedColumn)(),(0,a.__metadata)("design:type",Number)],l.prototype,"id",void 0),(0,a.__decorate)([(0,n.OneToOne)((()=>d.UserEntity),(e=>e.password)),(0,n.JoinColumn)(),(0,a.__metadata)("design:type","function"==typeof(i=void 0!==d.UserEntity&&d.UserEntity)?i:Object)],l.prototype,"user",void 0),(0,a.__decorate)([(0,n.Column)({type:"varchar",length:512,nullable:!1}),(0,a.__metadata)("design:type",String)],l.prototype,"passwordHashed",void 0),l=o=(0,a.__decorate)([(0,n.Entity)("COMMON_User_password")],l),t.UserPasswordEntity=l},285:(e,t,r)=>{var o,i,a,n;Object.defineProperty(t,"__esModule",{value:!0}),t.UserEntity=void 0;const s=r(752),d=r(250),c=r(849),l=r(481),u=r(193);let p=o=class extends d.BaseEntity{static createUser(e,t,r){return(0,s.__awaiter)(this,void 0,void 0,(function*(){if(yield this.findOne({where:{email:e}}))throw new l.BadRequestException(`${e} занят!`);const i=yield this.count({where:{name:t}});let a=new o;a.email=e,a.name=i?`${t} - ${i+1}`:t;const n=yield(0,c.validate)(a);if(n.length)throw new l.BadRequestException(n);a=yield this.save(a);try{yield u.UserPasswordEntity.setPassword(a,r)}catch(e){throw yield this.delete(a),new l.BadRequestException(e)}return a}))}static getUserByEmail(e){return(0,s.__awaiter)(this,void 0,void 0,(function*(){const t=yield this.findOne({where:{email:e}});if(!t)throw new l.UnauthorizedException;if(!(null==t?void 0:t.isActive))throw new l.ForbiddenException;return{email:t.email,name:t.name}}))}};(0,s.__decorate)([(0,c.IsEmail)(),(0,c.Length)(1,255),(0,d.PrimaryColumn)({type:"varchar",length:255,unique:!0}),(0,s.__metadata)("design:type",String)],p.prototype,"email",void 0),(0,s.__decorate)([(0,c.IsString)(),(0,c.Length)(1,255),(0,d.Column)({type:"varchar",length:255,unique:!0,nullable:!1}),(0,s.__metadata)("design:type",String)],p.prototype,"name",void 0),(0,s.__decorate)([(0,c.IsOptional)(),(0,c.IsBoolean)(),(0,d.Column)({type:"boolean",nullable:!1,default:!0}),(0,s.__metadata)("design:type",Boolean)],p.prototype,"isActive",void 0),(0,s.__decorate)([(0,d.CreateDateColumn)(),(0,s.__metadata)("design:type","function"==typeof(i="undefined"!=typeof Date&&Date)?i:Object)],p.prototype,"createTimestamp",void 0),(0,s.__decorate)([(0,d.UpdateDateColumn)(),(0,s.__metadata)("design:type","function"==typeof(a="undefined"!=typeof Date&&Date)?a:Object)],p.prototype,"updateTimestamp",void 0),(0,s.__decorate)([(0,d.OneToOne)((()=>u.UserPasswordEntity),(e=>e.user)),(0,s.__metadata)("design:type","function"==typeof(n=void 0!==u.UserPasswordEntity&&u.UserPasswordEntity)?n:Object)],p.prototype,"password",void 0),p=o=(0,s.__decorate)([(0,d.Entity)("COMMON_Users")],p),t.UserEntity=p},293:(e,t,r)=>{var o,i;Object.defineProperty(t,"__esModule",{value:!0}),t.LoggerRecord=t.LoggerRecordTypes=void 0;const a=r(752),n=r(250),s=r(849);var d;!function(e){e.log="log",e.error="error",e.warn="warn",e.debug="debug",e.verbose="verbose"}(d=t.LoggerRecordTypes||(t.LoggerRecordTypes={}));let c=o=class extends n.BaseEntity{static addRecord(e,t,r){return(0,a.__awaiter)(this,void 0,void 0,(function*(){const i=new o;return i.type=e,i.message=t,i.context=null!=r?r:null,yield(0,s.validate)(i),yield this.save(i)}))}static getAllRecords(){return(0,a.__awaiter)(this,void 0,void 0,(function*(){return yield this.find()}))}static removeAllRecords(){return(0,a.__awaiter)(this,void 0,void 0,(function*(){yield this.clear()}))}};(0,a.__decorate)([(0,n.PrimaryGeneratedColumn)(),(0,a.__metadata)("design:type",Number)],c.prototype,"id",void 0),(0,a.__decorate)([(0,n.CreateDateColumn)(),(0,a.__metadata)("design:type","function"==typeof(i="undefined"!=typeof Date&&Date)?i:Object)],c.prototype,"timestamp",void 0),(0,a.__decorate)([(0,s.IsEnum)(d),(0,n.Column)({type:"varchar",length:10,nullable:!1,enum:d}),(0,a.__metadata)("design:type",String)],c.prototype,"type",void 0),(0,a.__decorate)([(0,s.IsString)(),(0,s.Length)(1,1e3),(0,n.Column)({type:"varchar",length:1e3,nullable:!1}),(0,a.__metadata)("design:type",String)],c.prototype,"message",void 0),(0,a.__decorate)([(0,s.IsOptional)(),(0,s.IsString)(),(0,s.Length)(1,255),(0,n.Column)({type:"varchar",length:255,nullable:!0}),(0,a.__metadata)("design:type",String)],c.prototype,"context",void 0),c=o=(0,a.__decorate)([(0,n.Entity)("LOGGER_records")],c),t.LoggerRecord=c},4:(e,t,r)=>{Object.defineProperty(t,"__esModule",{value:!0}),t.StorageModule=void 0;const o=r(752),i=r(481),a=r(399),n=r(869);let s=class{};s=(0,o.__decorate)([(0,i.Module)({imports:[a.TypeOrmModule.forRoot(n.default)]})],s),t.StorageModule=s},869:(e,t,r)=>{Object.defineProperty(t,"__esModule",{value:!0});const o=r(17);t.default={type:"postgres",url:process.env.DATABASE_URL,ssl:{rejectUnauthorized:!1},autoLoadEntities:!0,synchronize:!1,retryAttempts:1,cli:{migrationsDir:(0,o.join)(__dirname,"libs","storage","src","lib","migrations")},entities:[(0,o.join)(__dirname,"libs","storage","src","lib","entities","*.entity.{ts,js}"),(0,o.join)(__dirname,"libs","storage","src","lib","entities","**","*.entity.{ts,js}")],migrations:[(0,o.join)(__dirname,"libs","storage","src","lib","migrations","*.{ts,js}"),(0,o.join)(__dirname,"libs","storage","src","lib","migrations","**","*.{ts,js}")],subscribers:[(0,o.join)(__dirname,"libs","storage","src","lib","subscribers","*.{ts,js}"),(0,o.join)(__dirname,"libs","storage","src","lib","subscribers","**","*.{ts,js}")]}},481:e=>{e.exports=require("@nestjs/common")},793:e=>{e.exports=require("@nestjs/config")},143:e=>{e.exports=require("@nestjs/core")},64:e=>{e.exports=require("@nestjs/jwt")},385:e=>{e.exports=require("@nestjs/serve-static")},399:e=>{e.exports=require("@nestjs/typeorm")},38:e=>{e.exports=require("argon2")},849:e=>{e.exports=require("class-validator")},860:e=>{e.exports=require("express")},752:e=>{e.exports=require("tslib")},250:e=>{e.exports=require("typeorm")},17:e=>{e.exports=require("path")}},t={};function r(o){var i=t[o];if(void 0!==i)return i.exports;var a=t[o]={exports:{}};return e[o](a,a.exports,r),a.exports}var o={};(()=>{var e=o;Object.defineProperty(e,"__esModule",{value:!0});const t=r(752),i=r(481),a=r(143),n=r(636),s=r(793),d=r(792);(function(){return(0,t.__awaiter)(this,void 0,void 0,(function*(){let e={};e={bufferLogs:!0,logger:new d.EventLoggerService};const t=yield a.NestFactory.create(n.AppModule,e),r=t.get(s.ConfigService),o=yield r.get("PORT");t.setGlobalPrefix("api"),t.useGlobalPipes(new i.ValidationPipe),yield t.listen(o),i.Logger.log(`Сервер запущен в режиме "production" на: http://localhost:${o}/api`)}))})().catch((e=>{i.Logger.error("При запуске сервера возникла ошибка:","main.boostrap()"),console.error(e)}))})();var i=exports;for(var a in o)i[a]=o[a];o.__esModule&&Object.defineProperty(i,"__esModule",{value:!0})})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./apps/server/src/app.module.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AppModule = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const config_1 = __webpack_require__("@nestjs/config");
+const serve_static_1 = __webpack_require__("@nestjs/serve-static");
+const path_1 = __webpack_require__("path");
+const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
+const server_module_1 = __webpack_require__("./libs/users/server-module/src/index.ts");
+let AppModule = class AppModule {
+};
+AppModule = (0, tslib_1.__decorate)([
+    (0, common_1.Module)({
+        imports: [
+            config_1.ConfigModule.forRoot(),
+            serve_static_1.ServeStaticModule.forRoot({
+                rootPath: (0, path_1.join)(__dirname, '..', 'client'),
+            }),
+            storage_1.StorageModule,
+            // AuthModule,
+            server_module_1.UsersModule,
+        ],
+        controllers: [],
+        providers: [],
+    })
+], AppModule);
+exports.AppModule = AppModule;
+
+
+/***/ }),
+
+/***/ "./libs/storage/src/index.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tslib_1 = __webpack_require__("tslib");
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/storage/src/lib/storage.module.ts"), exports);
+// COMMON - Role-based access control или Управление доступом на основе ролей
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/storage/src/lib/entities/user.entity.ts"), exports);
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/storage/src/lib/entities/user-password.entity.ts"), exports);
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/storage/src/lib/entities/role.entity.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/storage/src/lib/entities/role.entity.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.RoleEntity = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const typeorm_1 = __webpack_require__("typeorm");
+const class_validator_1 = __webpack_require__("class-validator");
+const user_entity_1 = __webpack_require__("./libs/storage/src/lib/entities/user.entity.ts");
+let RoleEntity = class RoleEntity extends typeorm_1.BaseEntity {
+};
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, tslib_1.__metadata)("design:type", Number)
+], RoleEntity.prototype, "id", void 0);
+(0, tslib_1.__decorate)([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Length)(1, 50),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50, unique: true, nullable: false }),
+    (0, tslib_1.__metadata)("design:type", String)
+], RoleEntity.prototype, "title", void 0);
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.ManyToMany)(() => user_entity_1.UserEntity, user => user.roles),
+    (0, tslib_1.__metadata)("design:type", Array)
+], RoleEntity.prototype, "users", void 0);
+RoleEntity = (0, tslib_1.__decorate)([
+    (0, typeorm_1.Entity)('Roles')
+], RoleEntity);
+exports.RoleEntity = RoleEntity;
+
+
+/***/ }),
+
+/***/ "./libs/storage/src/lib/entities/user-password.entity.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var UserPasswordEntity_1, _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UserPasswordEntity = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const typeorm_1 = __webpack_require__("typeorm");
+const argon2 = __webpack_require__("argon2");
+const user_entity_1 = __webpack_require__("./libs/storage/src/lib/entities/user.entity.ts");
+const common_1 = __webpack_require__("@nestjs/common");
+let UserPasswordEntity = UserPasswordEntity_1 = class UserPasswordEntity extends typeorm_1.BaseEntity {
+    /**
+     * Установить пароля пользователя
+     * @param user
+     * @param password
+     */
+    static setPassword(user, password) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            if (password.length < 8 || password.length > 64) {
+                throw new common_1.BadRequestException(`Длина пароля должна быть от 8 до 64 символов!`, `UserPasswordEntity.setPassword()`);
+            }
+            let userPassword = yield this.findOne({ where: { user: user } });
+            if (userPassword) {
+                userPassword.passwordHashed = yield argon2.hash(password);
+                yield this.save(userPassword);
+                return;
+            }
+            userPassword = new UserPasswordEntity_1();
+            userPassword.user = user;
+            userPassword.passwordHashed = yield argon2.hash(password);
+            return;
+        });
+    }
+    /**
+     * Это пароль пользователя?
+     * @param user
+     * @param password
+     */
+    static isPasswordOfUser(user, password) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            const entity = yield this.findOne({ where: { user: user } });
+            if (!entity)
+                return false;
+            return yield argon2.verify(entity.passwordHashed, password);
+        });
+    }
+};
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, tslib_1.__metadata)("design:type", Number)
+], UserPasswordEntity.prototype, "id", void 0);
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.OneToOne)(() => user_entity_1.UserEntity, user => user.password),
+    (0, typeorm_1.JoinColumn)(),
+    (0, tslib_1.__metadata)("design:type", typeof (_a = typeof user_entity_1.UserEntity !== "undefined" && user_entity_1.UserEntity) === "function" ? _a : Object)
+], UserPasswordEntity.prototype, "user", void 0);
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 512, nullable: false }),
+    (0, tslib_1.__metadata)("design:type", String)
+], UserPasswordEntity.prototype, "passwordHashed", void 0);
+UserPasswordEntity = UserPasswordEntity_1 = (0, tslib_1.__decorate)([
+    (0, typeorm_1.Entity)('User_password')
+], UserPasswordEntity);
+exports.UserPasswordEntity = UserPasswordEntity;
+
+
+/***/ }),
+
+/***/ "./libs/storage/src/lib/entities/user.entity.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var UserEntity_1, _a, _b, _c;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UserEntity = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const typeorm_1 = __webpack_require__("typeorm");
+const class_validator_1 = __webpack_require__("class-validator");
+const common_1 = __webpack_require__("@nestjs/common");
+const user_password_entity_1 = __webpack_require__("./libs/storage/src/lib/entities/user-password.entity.ts");
+const role_entity_1 = __webpack_require__("./libs/storage/src/lib/entities/role.entity.ts");
+let UserEntity = UserEntity_1 = class UserEntity extends typeorm_1.BaseEntity {
+    /**
+     * Создание нового пользователя
+     * @param email
+     * @param name
+     * @param password
+     */
+    static createUser(email, name, password) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            common_1.Logger.log(`Создание нового пользователя.`, `UserEntity.createUser(${email}, ${name})`);
+            const checkEmail = yield this.findOne({ where: { email: email } });
+            if (checkEmail) {
+                common_1.Logger.warn(`${email} занят!`, `UserEntity.createUser(${email}, ${name})`);
+                throw new common_1.BadRequestException(`${email} занят!`);
+            }
+            const countUsersWithSameName = yield this.count({ where: { name: name } });
+            let user = new UserEntity_1();
+            user.email = email;
+            user.name = !countUsersWithSameName ? name : `${name} - ${countUsersWithSameName + 1}`;
+            const validateUserDataErrors = yield (0, class_validator_1.validate)(user);
+            if (validateUserDataErrors.length) {
+                common_1.Logger.warn(`${validateUserDataErrors}`, `UserEntity.createUser(${email}, ${name})`);
+                throw new common_1.BadRequestException(validateUserDataErrors);
+            }
+            user = yield this.save(user);
+            try {
+                yield user_password_entity_1.UserPasswordEntity.setPassword(user, password);
+            }
+            catch (err) {
+                common_1.Logger.warn(`Пароль не прошел валидацию! Создание пользователя прервано!`, `UserEntity.createUser(${email}, ${name})`);
+                yield this.delete(user);
+                throw new common_1.BadRequestException(err);
+            }
+            // Если это первый пользователь приложения - инициализируем новые роли и пользователя-админа
+            const currentUsersCount = yield this.count();
+            if (currentUsersCount === 1) {
+                common_1.Logger.log(`Создан первый пользователь приложения.`, `UserEntity.createUser(${email}, ${name})`);
+                common_1.Logger.log(`Инициализируем ролевую модель и назначаем администратора!`, `UserEntity.createUser(${email}, ${name})`);
+                let roleAdmin = new role_entity_1.RoleEntity();
+                roleAdmin.title = 'admin';
+                roleAdmin = yield role_entity_1.RoleEntity.save(roleAdmin);
+                common_1.Logger.log(`Создана роль "Администратор".`, `UserEntity.createUser(${email}, ${name})`);
+                const roleUser = new role_entity_1.RoleEntity();
+                roleUser.title = 'user';
+                yield role_entity_1.RoleEntity.save(roleUser);
+                common_1.Logger.log(`Создана роль "Пользователь".`, `UserEntity.createUser(${email}, ${name})`);
+                user.roles = [roleAdmin];
+                yield this.save(user);
+                common_1.Logger.log(`Пользователю ${name} присвоена роль "Администратор".`, `UserEntity.createUser(${email}, ${name})`);
+            }
+            const roleUser = yield role_entity_1.RoleEntity.findOne({ where: { title: 'user' } });
+            user.roles = [...user.roles, roleUser];
+            yield this.save(user);
+            common_1.Logger.log(`Пользователю ${name} присвоена роль "Пользователь".`, `UserEntity.createUser(${email}, ${name})`);
+            common_1.Logger.log(`Пользователь ${name} успешно зарегистрирован.`, `UserEntity.createUser(${email}, ${name})`);
+            return user;
+        });
+    }
+    /**
+     * Получить пользователя по email
+     * @param email
+     */
+    static getUserByEmail(email) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            const entity = yield this.findOne({ where: { email: email } });
+            if (!entity) {
+                throw new common_1.UnauthorizedException();
+            }
+            if (!(entity === null || entity === void 0 ? void 0 : entity.isActive)) {
+                throw new common_1.ForbiddenException();
+            }
+            return {
+                email: entity.email,
+                name: entity.name,
+            };
+        });
+    }
+};
+(0, tslib_1.__decorate)([
+    (0, class_validator_1.IsEmail)(),
+    (0, class_validator_1.Length)(1, 255),
+    (0, typeorm_1.PrimaryColumn)({ type: 'varchar', length: 255, unique: true }),
+    (0, tslib_1.__metadata)("design:type", String)
+], UserEntity.prototype, "email", void 0);
+(0, tslib_1.__decorate)([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Length)(1, 255),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 255, unique: true, nullable: false }),
+    (0, tslib_1.__metadata)("design:type", String)
+], UserEntity.prototype, "name", void 0);
+(0, tslib_1.__decorate)([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    (0, typeorm_1.Column)({ type: 'boolean', nullable: false, default: true }),
+    (0, tslib_1.__metadata)("design:type", Boolean)
+], UserEntity.prototype, "isActive", void 0);
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.CreateDateColumn)(),
+    (0, tslib_1.__metadata)("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], UserEntity.prototype, "createTimestamp", void 0);
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.UpdateDateColumn)(),
+    (0, tslib_1.__metadata)("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+], UserEntity.prototype, "updateTimestamp", void 0);
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.OneToOne)(() => user_password_entity_1.UserPasswordEntity, password => password.user),
+    (0, tslib_1.__metadata)("design:type", typeof (_c = typeof user_password_entity_1.UserPasswordEntity !== "undefined" && user_password_entity_1.UserPasswordEntity) === "function" ? _c : Object)
+], UserEntity.prototype, "password", void 0);
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.ManyToMany)(() => role_entity_1.RoleEntity, roles => roles.users),
+    (0, typeorm_1.JoinTable)(),
+    (0, tslib_1.__metadata)("design:type", Array)
+], UserEntity.prototype, "roles", void 0);
+UserEntity = UserEntity_1 = (0, tslib_1.__decorate)([
+    (0, typeorm_1.Entity)('Users')
+], UserEntity);
+exports.UserEntity = UserEntity;
+
+
+/***/ }),
+
+/***/ "./libs/storage/src/lib/storage.module.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.StorageModule = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const typeorm_1 = __webpack_require__("@nestjs/typeorm");
+const ormconfig_1 = __webpack_require__("./ormconfig.ts");
+let StorageModule = class StorageModule {
+};
+StorageModule = (0, tslib_1.__decorate)([
+    (0, common_1.Module)({
+        imports: [
+            typeorm_1.TypeOrmModule.forRoot(ormconfig_1.default),
+        ],
+    })
+], StorageModule);
+exports.StorageModule = StorageModule;
+
+
+/***/ }),
+
+/***/ "./libs/users/server-module/src/index.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tslib_1 = __webpack_require__("tslib");
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/users/server-module/src/lib/users.module.ts"), exports);
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/users/server-module/src/lib/dto/create-user.dto.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/users/server-module/src/lib/dto/create-user.dto.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CreateUserDto = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const class_validator_1 = __webpack_require__("class-validator");
+class CreateUserDto {
+}
+(0, tslib_1.__decorate)([
+    (0, class_validator_1.IsEmail)(),
+    (0, tslib_1.__metadata)("design:type", String)
+], CreateUserDto.prototype, "email", void 0);
+(0, tslib_1.__decorate)([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Length)(1, 255),
+    (0, tslib_1.__metadata)("design:type", String)
+], CreateUserDto.prototype, "name", void 0);
+(0, tslib_1.__decorate)([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Length)(7, 64),
+    (0, tslib_1.__metadata)("design:type", String)
+], CreateUserDto.prototype, "password", void 0);
+exports.CreateUserDto = CreateUserDto;
+
+
+/***/ }),
+
+/***/ "./libs/users/server-module/src/lib/users.controller.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b, _c, _d;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UsersController = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const users_service_1 = __webpack_require__("./libs/users/server-module/src/lib/users.service.ts");
+const create_user_dto_1 = __webpack_require__("./libs/users/server-module/src/lib/dto/create-user.dto.ts");
+let UsersController = class UsersController {
+    constructor(usersService) {
+        this.usersService = usersService;
+    }
+    /**
+     * Создание нового пользователя
+     * @url /api/users
+     * @param data
+     * @private
+     */
+    createUser(data) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            return yield this.usersService.createUser(data);
+        });
+    }
+    /**
+     * Получить список всех пользователей
+     * @url /api/users
+     * @private
+     */
+    getAllUsers() {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            return yield this.usersService.findAllUsers();
+        });
+    }
+};
+(0, tslib_1.__decorate)([
+    (0, common_1.Post)(),
+    (0, tslib_1.__param)(0, (0, common_1.Body)()),
+    (0, tslib_1.__metadata)("design:type", Function),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_a = typeof create_user_dto_1.CreateUserDto !== "undefined" && create_user_dto_1.CreateUserDto) === "function" ? _a : Object]),
+    (0, tslib_1.__metadata)("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+], UsersController.prototype, "createUser", null);
+(0, tslib_1.__decorate)([
+    (0, common_1.Get)(),
+    (0, tslib_1.__metadata)("design:type", Function),
+    (0, tslib_1.__metadata)("design:paramtypes", []),
+    (0, tslib_1.__metadata)("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], UsersController.prototype, "getAllUsers", null);
+UsersController = (0, tslib_1.__decorate)([
+    (0, common_1.Controller)('users'),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_d = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _d : Object])
+], UsersController);
+exports.UsersController = UsersController;
+
+
+/***/ }),
+
+/***/ "./libs/users/server-module/src/lib/users.module.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UsersModule = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const typeorm_1 = __webpack_require__("@nestjs/typeorm");
+const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
+const storage_2 = __webpack_require__("./libs/storage/src/index.ts");
+const users_controller_1 = __webpack_require__("./libs/users/server-module/src/lib/users.controller.ts");
+const users_service_1 = __webpack_require__("./libs/users/server-module/src/lib/users.service.ts");
+let UsersModule = class UsersModule {
+};
+UsersModule = (0, tslib_1.__decorate)([
+    (0, common_1.Module)({
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([
+                storage_1.UserEntity, storage_1.UserPasswordEntity, storage_2.RoleEntity,
+            ]),
+        ],
+        controllers: [users_controller_1.UsersController],
+        providers: [users_service_1.UsersService],
+    })
+], UsersModule);
+exports.UsersModule = UsersModule;
+
+
+/***/ }),
+
+/***/ "./libs/users/server-module/src/lib/users.service.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UsersService = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
+let UsersService = class UsersService {
+    /**
+     * Создание пользователя
+     * @param data
+     */
+    createUser(data) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            return yield storage_1.UserEntity.createUser(data.email, data.name, data.password);
+        });
+    }
+    /**
+     * Найти всех пользователей
+     */
+    findAllUsers() {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            return storage_1.UserEntity.find({ relations: ['roles'] });
+        });
+    }
+};
+UsersService = (0, tslib_1.__decorate)([
+    (0, common_1.Injectable)()
+], UsersService);
+exports.UsersService = UsersService;
+
+
+/***/ }),
+
+/***/ "./ormconfig.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const path_1 = __webpack_require__("path");
+/**
+ * Конфигурация подключения к СУБД
+ * Данная конфигурация используется как для работы в рантайме, так и для работы с TypeORM CLI
+ */
+exports["default"] = (() => {
+    if (false) {}
+    else {
+        return {
+            type: 'sqljs',
+            location: 'dev.db',
+            autoSave: true,
+            synchronize: false,
+            retryAttempts: 1,
+            autoLoadEntities: true,
+            logging: 'all',
+            logger: 'file',
+            cli: {
+                migrationsDir: (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'migrations'),
+            },
+            entities: [
+                (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'entities', '*.entity.{ts,js}'),
+                (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'entities', '**', '*.entity.{ts,js}'),
+            ],
+            migrations: [
+                (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'migrations', '*.{ts,js}'),
+                (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'migrations', '**', '*.{ts,js}'),
+            ],
+            subscribers: [
+                (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'subscribers', '*.{ts,js}'),
+                (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'subscribers', '**', '*.{ts,js}'),
+            ],
+        };
+    }
+})();
+
+
+/***/ }),
+
+/***/ "@nestjs/common":
+/***/ ((module) => {
+
+module.exports = require("@nestjs/common");
+
+/***/ }),
+
+/***/ "@nestjs/config":
+/***/ ((module) => {
+
+module.exports = require("@nestjs/config");
+
+/***/ }),
+
+/***/ "@nestjs/core":
+/***/ ((module) => {
+
+module.exports = require("@nestjs/core");
+
+/***/ }),
+
+/***/ "@nestjs/serve-static":
+/***/ ((module) => {
+
+module.exports = require("@nestjs/serve-static");
+
+/***/ }),
+
+/***/ "@nestjs/typeorm":
+/***/ ((module) => {
+
+module.exports = require("@nestjs/typeorm");
+
+/***/ }),
+
+/***/ "argon2":
+/***/ ((module) => {
+
+module.exports = require("argon2");
+
+/***/ }),
+
+/***/ "class-validator":
+/***/ ((module) => {
+
+module.exports = require("class-validator");
+
+/***/ }),
+
+/***/ "tslib":
+/***/ ((module) => {
+
+module.exports = require("tslib");
+
+/***/ }),
+
+/***/ "typeorm":
+/***/ ((module) => {
+
+module.exports = require("typeorm");
+
+/***/ }),
+
+/***/ "path":
+/***/ ((module) => {
+
+module.exports = require("path");
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+var exports = __webpack_exports__;
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const core_1 = __webpack_require__("@nestjs/core");
+const app_module_1 = __webpack_require__("./apps/server/src/app.module.ts");
+const config_1 = __webpack_require__("@nestjs/config");
+function bootstrap() {
+    return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        const app = yield core_1.NestFactory.create(app_module_1.AppModule);
+        const configService = app.get(config_1.ConfigService);
+        const port = yield configService.get('PORT');
+        const globalPrefix = 'api';
+        // Инициализируем глобальный префикс для всех REST'ов
+        app.setGlobalPrefix(globalPrefix);
+        // Инициализируем глобальную валидацию всех входящих данных через DTO
+        app.useGlobalPipes(new common_1.ValidationPipe());
+        // Стартуем сервер
+        yield app.listen(port);
+        common_1.Logger.log(`Сервер запущен в режиме "${"development"}" на: http://localhost:${port}/${globalPrefix}`);
+    });
+}
+bootstrap().catch((err) => {
+    common_1.Logger.error(`При запуске сервера возникла ошибка:`, `main.boostrap()`);
+    console.error(err);
+});
+
+})();
+
+var __webpack_export_target__ = exports;
+for(var i in __webpack_exports__) __webpack_export_target__[i] = __webpack_exports__[i];
+if(__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, "__esModule", { value: true });
+/******/ })()
+;
 //# sourceMappingURL=main.js.map

@@ -2,24 +2,15 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { EventLoggerService } from "@znode/event-logger-server-module";
 
 async function bootstrap() {
-  let options = {};
-  if (process.env.NODE_ENV === 'production') {
-    options = {
-      bufferLogs: true,
-      logger: new EventLoggerService(),
-    };
-  }
-  const app = await NestFactory.create(AppModule, options);
+  const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const port = await configService.get<string | number>('PORT');
   const globalPrefix = 'api';
 
   // Инициализируем глобальный префикс для всех REST'ов
   app.setGlobalPrefix(globalPrefix);
-
 
   // Инициализируем глобальную валидацию всех входящих данных через DTO
   app.useGlobalPipes(new ValidationPipe());

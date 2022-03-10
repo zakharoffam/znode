@@ -28,7 +28,8 @@
       "@znode/event-logger-server-module": [
         "libs/event-logger/server-module/src/index.ts"
       ],
-      "@znode/storage": ["libs/storage/src/index.ts"]
+      "@znode/storage": ["libs/storage/src/index.ts"],
+      "@znode/users/server-module": ["libs/users/server-module/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

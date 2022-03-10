@@ -3,7 +3,7 @@ import * as argon2 from "argon2";
 import { UserEntity } from "./user.entity";
 import { BadRequestException } from "@nestjs/common";
 
-@Entity('COMMON_User_password')
+@Entity('User_password')
 export class UserPasswordEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

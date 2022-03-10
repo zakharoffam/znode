@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'event-logger-server-module',
+  displayName: 'users-server-module',
   preset: '../../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -11,5 +11,5 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../coverage/libs/event-logger/server-module',
+  coverageDirectory: '../../../coverage/libs/users/server-module',
 };

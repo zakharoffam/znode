@@ -1,5 +1,5 @@
 import { Test } from "@nestjs/testing";
-import { StorageModule } from '../../storage.module';
+import { StorageModule } from '../storage.module';
 import { UserEntity } from './user.entity';
 import { UserPasswordEntity } from './user-password.entity';
 import { TypeOrmModule } from "@nestjs/typeorm";

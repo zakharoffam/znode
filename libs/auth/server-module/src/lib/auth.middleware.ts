@@ -20,7 +20,6 @@ export class AuthMiddleware implements NestMiddleware {
    * @param next
    */
   async use(req: RequestWithUser, res: Response, next: NextFunction) {
-    console.log(req.headers);
     const auth = req.headers['Authorization'];
     Logger.log(auth);
     if (!auth) {

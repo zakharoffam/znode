@@ -37,7 +37,7 @@ export default ((): TypeOrmModuleOptions  => {
       type: 'sqljs',
       location: 'dev.db',
       autoSave: true,
-      synchronize: true,
+      synchronize: false,
       retryAttempts: 1,
       autoLoadEntities: true,
       logging: 'all',

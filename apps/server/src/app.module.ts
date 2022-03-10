@@ -4,7 +4,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { StorageModule } from '@znode/storage';
 import { AuthModule } from '@znode/auth-server-module';
-import { EventLoggerModule } from '@znode/event-logger-server-module';
+import { UsersModule } from "@znode/users/server-module";
 
 @Module({
   imports: [
@@ -13,8 +13,8 @@ import { EventLoggerModule } from '@znode/event-logger-server-module';
       rootPath: join(__dirname, '..', 'client'),
     }),
     StorageModule,
-    AuthModule,
-    EventLoggerModule,
+    // AuthModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],

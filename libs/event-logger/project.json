@@ -1,23 +1,23 @@
 {
-  "root": "libs/client/api",
-  "sourceRoot": "libs/client/api/src",
+  "root": "libs/event-logger",
+  "sourceRoot": "libs/event-logger/src",
   "projectType": "library",
-  "tags": [],
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/client/api/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["libs/event-logger/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/client/api"],
+      "outputs": ["coverage/libs/event-logger"],
       "options": {
-        "jestConfig": "libs/client/api/jest.config.js",
+        "jestConfig": "libs/event-logger/jest.config.js",
         "passWithNoTests": true
       }
     }
-  }
+  },
+  "tags": []
 }

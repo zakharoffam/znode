@@ -15,6 +15,7 @@ const serve_static_1 = __webpack_require__("@nestjs/serve-static");
 const path_1 = __webpack_require__("path");
 const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
 const server_module_1 = __webpack_require__("./libs/users/server-module/src/index.ts");
+const event_logger_1 = __webpack_require__("./libs/event-logger/src/index.ts");
 let AppModule = class AppModule {
 };
 AppModule = (0, tslib_1.__decorate)([
@@ -25,6 +26,7 @@ AppModule = (0, tslib_1.__decorate)([
                 rootPath: (0, path_1.join)(__dirname, '..', 'client'),
             }),
             storage_1.StorageModule,
+            event_logger_1.EventLoggerModule,
             // AuthModule,
             server_module_1.UsersModule,
         ],
@@ -37,6 +39,176 @@ exports.AppModule = AppModule;
 
 /***/ }),
 
+/***/ "./libs/event-logger/src/index.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tslib_1 = __webpack_require__("tslib");
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/event-logger/src/lib/event-logger.module.ts"), exports);
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/event-logger/src/lib/event-logger.service.ts"), exports);
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/event-logger/src/lib/dto/event-logger-record.dto.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/event-logger/src/lib/dto/event-logger-record.dto.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EventLoggerRecordDto = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
+const class_validator_1 = __webpack_require__("class-validator");
+class EventLoggerRecordDto {
+}
+(0, tslib_1.__decorate)([
+    (0, class_validator_1.IsEnum)(storage_1.RecordTypes),
+    (0, tslib_1.__metadata)("design:type", typeof (_a = typeof storage_1.RecordTypes !== "undefined" && storage_1.RecordTypes) === "function" ? _a : Object)
+], EventLoggerRecordDto.prototype, "type", void 0);
+(0, tslib_1.__decorate)([
+    (0, class_validator_1.IsString)(),
+    (0, tslib_1.__metadata)("design:type", String)
+], EventLoggerRecordDto.prototype, "message", void 0);
+(0, tslib_1.__decorate)([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, tslib_1.__metadata)("design:type", String)
+], EventLoggerRecordDto.prototype, "context", void 0);
+exports.EventLoggerRecordDto = EventLoggerRecordDto;
+
+
+/***/ }),
+
+/***/ "./libs/event-logger/src/lib/event-logger.controller.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EventLoggerController = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
+const event_logger_record_dto_1 = __webpack_require__("./libs/event-logger/src/lib/dto/event-logger-record.dto.ts");
+let EventLoggerController = class EventLoggerController {
+    /**
+     * Добавить запись в журнал событий
+     * @url /api/event-logger/record
+     * @param body EventLoggerRecordDto
+     * @returns EventLoggerRecordEntity
+     */
+    postRecord(body) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            return yield storage_1.EventLoggerRecordEntity.addRecord(body.type, body.message, body.context);
+        });
+    }
+    /**
+     * Получить все записи журнала событий
+     * @returns EventLoggerRecordEntity[]
+     */
+    getRecords() {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            return yield storage_1.EventLoggerRecordEntity.find();
+        });
+    }
+};
+(0, tslib_1.__decorate)([
+    (0, common_1.Post)('records'),
+    (0, tslib_1.__param)(0, (0, common_1.Body)()),
+    (0, tslib_1.__metadata)("design:type", Function),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_a = typeof event_logger_record_dto_1.EventLoggerRecordDto !== "undefined" && event_logger_record_dto_1.EventLoggerRecordDto) === "function" ? _a : Object]),
+    (0, tslib_1.__metadata)("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+], EventLoggerController.prototype, "postRecord", null);
+(0, tslib_1.__decorate)([
+    (0, common_1.Get)('records'),
+    (0, tslib_1.__metadata)("design:type", Function),
+    (0, tslib_1.__metadata)("design:paramtypes", []),
+    (0, tslib_1.__metadata)("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], EventLoggerController.prototype, "getRecords", null);
+EventLoggerController = (0, tslib_1.__decorate)([
+    (0, common_1.Controller)('event-logger')
+], EventLoggerController);
+exports.EventLoggerController = EventLoggerController;
+
+
+/***/ }),
+
+/***/ "./libs/event-logger/src/lib/event-logger.module.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EventLoggerModule = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const typeorm_1 = __webpack_require__("@nestjs/typeorm");
+const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
+const event_logger_controller_1 = __webpack_require__("./libs/event-logger/src/lib/event-logger.controller.ts");
+const event_logger_service_1 = __webpack_require__("./libs/event-logger/src/lib/event-logger.service.ts");
+let EventLoggerModule = class EventLoggerModule {
+};
+EventLoggerModule = (0, tslib_1.__decorate)([
+    (0, common_1.Module)({
+        imports: [typeorm_1.TypeOrmModule.forFeature([storage_1.EventLoggerRecordEntity])],
+        controllers: [event_logger_controller_1.EventLoggerController],
+        providers: [event_logger_service_1.EventLoggerService],
+        exports: [event_logger_service_1.EventLoggerService],
+    })
+], EventLoggerModule);
+exports.EventLoggerModule = EventLoggerModule;
+
+
+/***/ }),
+
+/***/ "./libs/event-logger/src/lib/event-logger.service.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EventLoggerService = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
+let EventLoggerService = class EventLoggerService extends common_1.ConsoleLogger {
+    stdout(message, context) {
+        console.log('EVENT LOGGER');
+        console.log('timestamp: ' + new Date().toISOString());
+        console.log('context: ' + context);
+        console.log('message: ' + message);
+        console.log();
+    }
+    log(message, context) {
+        this.stdout(message, context);
+        storage_1.EventLoggerRecordEntity.addRecord(storage_1.RecordTypes.log, message, context);
+    }
+    warn(message, context) {
+        this.stdout(message, context);
+        storage_1.EventLoggerRecordEntity.addRecord(storage_1.RecordTypes.warn, message, context);
+    }
+    erroe(message, context) {
+        this.stdout(message, context);
+        storage_1.EventLoggerRecordEntity.addRecord(storage_1.RecordTypes.error, message, context);
+    }
+    verbose(message, context) {
+        this.stdout(message, context);
+        storage_1.EventLoggerRecordEntity.addRecord(storage_1.RecordTypes.verbose, message, context);
+    }
+    debug(message, context) {
+        this.stdout(message, context);
+        storage_1.EventLoggerRecordEntity.addRecord(storage_1.RecordTypes.debug, message, context);
+    }
+};
+EventLoggerService = (0, tslib_1.__decorate)([
+    (0, common_1.Injectable)()
+], EventLoggerService);
+exports.EventLoggerService = EventLoggerService;
+
+
+/***/ }),
+
 /***/ "./libs/storage/src/index.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -44,10 +216,78 @@ exports.AppModule = AppModule;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__("tslib");
 (0, tslib_1.__exportStar)(__webpack_require__("./libs/storage/src/lib/storage.module.ts"), exports);
-// COMMON - Role-based access control или Управление доступом на основе ролей
+// Сущности
 (0, tslib_1.__exportStar)(__webpack_require__("./libs/storage/src/lib/entities/user.entity.ts"), exports);
 (0, tslib_1.__exportStar)(__webpack_require__("./libs/storage/src/lib/entities/user-password.entity.ts"), exports);
 (0, tslib_1.__exportStar)(__webpack_require__("./libs/storage/src/lib/entities/role.entity.ts"), exports);
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/storage/src/lib/entities/event-logger-record.entity.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/storage/src/lib/entities/event-logger-record.entity.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var EventLoggerRecordEntity_1;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EventLoggerRecordEntity = exports.RecordTypes = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const typeorm_1 = __webpack_require__("typeorm");
+var RecordTypes;
+(function (RecordTypes) {
+    RecordTypes["log"] = "log";
+    RecordTypes["warn"] = "warn";
+    RecordTypes["error"] = "error";
+    RecordTypes["verbose"] = "verbose";
+    RecordTypes["debug"] = "debug";
+})(RecordTypes = exports.RecordTypes || (exports.RecordTypes = {}));
+/**
+ * Запись журнала событий
+ */
+let EventLoggerRecordEntity = EventLoggerRecordEntity_1 = class EventLoggerRecordEntity extends typeorm_1.BaseEntity {
+    /**
+     * Добавить запись в журнал событий
+     * @param type Тип записи
+     * @param message Сообщение
+     * @param context Контекст в котором вызывается метод
+     * @returns
+     */
+    static addRecord(type, message, context) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            let record = new EventLoggerRecordEntity_1();
+            record.type = type;
+            record.message = message;
+            record.context = context !== null && context !== void 0 ? context : null;
+            record = yield this.save(record);
+            return record;
+        });
+    }
+};
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, tslib_1.__metadata)("design:type", Number)
+], EventLoggerRecordEntity.prototype, "id", void 0);
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.CreateDateColumn)(),
+    (0, tslib_1.__metadata)("design:type", String)
+], EventLoggerRecordEntity.prototype, "timestamp", void 0);
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.Column)({ type: 'varchar', nullable: false, enum: RecordTypes }),
+    (0, tslib_1.__metadata)("design:type", String)
+], EventLoggerRecordEntity.prototype, "type", void 0);
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.Column)({ type: 'varchar', nullable: false }),
+    (0, tslib_1.__metadata)("design:type", String)
+], EventLoggerRecordEntity.prototype, "message", void 0);
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.Column)({ type: 'varchar', nullable: true }),
+    (0, tslib_1.__metadata)("design:type", String)
+], EventLoggerRecordEntity.prototype, "context", void 0);
+EventLoggerRecordEntity = EventLoggerRecordEntity_1 = (0, tslib_1.__decorate)([
+    (0, typeorm_1.Entity)()
+], EventLoggerRecordEntity);
+exports.EventLoggerRecordEntity = EventLoggerRecordEntity;
 
 
 /***/ }),
@@ -303,11 +543,7 @@ const ormconfig_1 = __webpack_require__("./ormconfig.ts");
 let StorageModule = class StorageModule {
 };
 StorageModule = (0, tslib_1.__decorate)([
-    (0, common_1.Module)({
-        imports: [
-            typeorm_1.TypeOrmModule.forRoot(ormconfig_1.default),
-        ],
-    })
+    (0, common_1.Module)({ imports: [typeorm_1.TypeOrmModule.forRoot(ormconfig_1.default)] })
 ], StorageModule);
 exports.StorageModule = StorageModule;
 
@@ -492,34 +728,31 @@ const path_1 = __webpack_require__("path");
  * Данная конфигурация используется как для работы в рантайме, так и для работы с TypeORM CLI
  */
 exports["default"] = (() => {
-    if (false) {}
-    else {
-        return {
-            type: 'sqljs',
-            location: 'dev.db',
-            autoSave: true,
-            synchronize: false,
-            retryAttempts: 1,
-            autoLoadEntities: true,
-            logging: 'all',
-            logger: 'file',
-            cli: {
-                migrationsDir: (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'migrations'),
-            },
-            entities: [
-                (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'entities', '*.entity.{ts,js}'),
-                (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'entities', '**', '*.entity.{ts,js}'),
-            ],
-            migrations: [
-                (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'migrations', '*.{ts,js}'),
-                (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'migrations', '**', '*.{ts,js}'),
-            ],
-            subscribers: [
-                (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'subscribers', '*.{ts,js}'),
-                (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'subscribers', '**', '*.{ts,js}'),
-            ],
-        };
-    }
+    return {
+        type: 'postgres',
+        url: process.env.DATABASE_URL,
+        ssl: {
+            rejectUnauthorized: false,
+        },
+        autoLoadEntities: true,
+        synchronize: false,
+        retryAttempts: 1,
+        cli: {
+            migrationsDir: (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'migrations'),
+        },
+        entities: [
+            (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'entities', '*.entity.{ts,js}'),
+            (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'entities', '**', '*.entity.{ts,js}'),
+        ],
+        migrations: [
+            (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'migrations', '*.{ts,js}'),
+            (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'migrations', '**', '*.{ts,js}'),
+        ],
+        subscribers: [
+            (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'subscribers', '*.{ts,js}'),
+            (0, path_1.join)(__dirname, 'libs', 'storage', 'src', 'lib', 'subscribers', '**', '*.{ts,js}'),
+        ],
+    };
 })();
 
 
@@ -633,11 +866,15 @@ const common_1 = __webpack_require__("@nestjs/common");
 const core_1 = __webpack_require__("@nestjs/core");
 const app_module_1 = __webpack_require__("./apps/server/src/app.module.ts");
 const config_1 = __webpack_require__("@nestjs/config");
+const event_logger_1 = __webpack_require__("./libs/event-logger/src/index.ts");
 function bootstrap() {
     return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-        const app = yield core_1.NestFactory.create(app_module_1.AppModule);
+        const app = yield core_1.NestFactory.create(app_module_1.AppModule, {
+            bufferLogs: true,
+            logger: new event_logger_1.EventLoggerService,
+        });
         const configService = app.get(config_1.ConfigService);
-        const port = yield configService.get('PORT');
+        const port = configService.get('PORT');
         const globalPrefix = 'api';
         // Инициализируем глобальный префикс для всех REST'ов
         app.setGlobalPrefix(globalPrefix);

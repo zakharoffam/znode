@@ -25,6 +25,7 @@
       "@znode/common/interfaces": ["libs/common/interfaces/src/index.ts"],
       "@znode/event-log-module": ["libs/event-log/module/src/index.ts"],
       "@znode/event-log-web-pages": ["libs/event-log/web-pages/src/index.ts"],
+      "@znode/event-logger": ["libs/event-logger/src/index.ts"],
       "@znode/event-logger-server-module": [
         "libs/event-logger/server-module/src/index.ts"
       ],

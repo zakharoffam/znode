@@ -5,6 +5,7 @@ import { join } from 'path';
 import { StorageModule } from '@znode/storage';
 import { AuthModule } from '@znode/auth-server-module';
 import { UsersModule } from "@znode/users/server-module";
+import { EventLoggerModule } from '@znode/event-logger';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { UsersModule } from "@znode/users/server-module";
       rootPath: join(__dirname, '..', 'client'),
     }),
     StorageModule,
+    EventLoggerModule,
     // AuthModule,
     UsersModule,
   ],

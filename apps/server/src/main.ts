@@ -2,11 +2,15 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
+import { EventLoggerService } from '@znode/event-logger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+    logger: new EventLoggerService,
+  });
   const configService = app.get(ConfigService);
-  const port = await configService.get<string | number>('PORT');
+  const port = configService.get<string | number>('PORT');
   const globalPrefix = 'api';
 
   // Инициализируем глобальный префикс для всех REST'ов

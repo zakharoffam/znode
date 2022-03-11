@@ -1,10 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import config from '../../../../ormconfig';
+import ormConfig from '../../../../ormconfig';
 
-@Module({
-  imports: [
-    TypeOrmModule.forRoot(config),
-  ],
-})
+@Module({ imports: [TypeOrmModule.forRoot(ormConfig)] })
 export class StorageModule {}

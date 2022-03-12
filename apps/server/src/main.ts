@@ -5,10 +5,11 @@ import { ConfigService } from '@nestjs/config';
 import { EventLoggerService } from '@znode/event-logger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    bufferLogs: true,
-    logger: new EventLoggerService,
-  });
+  // const app = await NestFactory.create(AppModule, {
+  //   bufferLogs: true,
+  //   logger: new EventLoggerService,
+  // });
+  const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const port = configService.get<string | number>('PORT');
   const globalPrefix = 'api';

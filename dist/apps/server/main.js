@@ -16,6 +16,7 @@ const path_1 = __webpack_require__("path");
 const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
 const server_module_1 = __webpack_require__("./libs/users/server-module/src/index.ts");
 const event_logger_1 = __webpack_require__("./libs/event-logger/src/index.ts");
+const helper_bot_1 = __webpack_require__("./libs/telegram/helper-bot/src/index.ts");
 let AppModule = class AppModule {
 };
 AppModule = (0, tslib_1.__decorate)([
@@ -29,6 +30,7 @@ AppModule = (0, tslib_1.__decorate)([
             event_logger_1.EventLoggerModule,
             // AuthModule,
             server_module_1.UsersModule,
+            helper_bot_1.TelegramHelperBotModule,
         ],
         controllers: [],
         providers: [],
@@ -550,6 +552,126 @@ exports.StorageModule = StorageModule;
 
 /***/ }),
 
+/***/ "./libs/telegram/helper-bot/src/index.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tslib_1 = __webpack_require__("tslib");
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/telegram/helper-bot/src/lib/telegram-helper-bot.module.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/telegram/helper-bot/src/lib/telegram-helper-bot.controller.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TelegramHelperBotController = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const telegram_helper_bot_service_1 = __webpack_require__("./libs/telegram/helper-bot/src/lib/telegram-helper-bot.service.ts");
+let TelegramHelperBotController = class TelegramHelperBotController {
+    constructor(telegramHelperBotService) {
+        this.telegramHelperBotService = telegramHelperBotService;
+    }
+    update(data) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            common_1.Logger.log('TELEGRAM_HELPER_BOT');
+            common_1.Logger.log('input_data: ');
+            common_1.Logger.log(data);
+            return 'Ok';
+        });
+    }
+};
+(0, tslib_1.__decorate)([
+    (0, common_1.Post)(process.env.HELPER_BOT_TOKEN),
+    (0, tslib_1.__param)(0, (0, common_1.Body)()),
+    (0, tslib_1.__metadata)("design:type", Function),
+    (0, tslib_1.__metadata)("design:paramtypes", [Object]),
+    (0, tslib_1.__metadata)("design:returntype", typeof (_a = typeof Promise !== "undefined" && Promise) === "function" ? _a : Object)
+], TelegramHelperBotController.prototype, "update", null);
+TelegramHelperBotController = (0, tslib_1.__decorate)([
+    (0, common_1.Controller)('telegram-helper-bot'),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_b = typeof telegram_helper_bot_service_1.TelegramHelperBotService !== "undefined" && telegram_helper_bot_service_1.TelegramHelperBotService) === "function" ? _b : Object])
+], TelegramHelperBotController);
+exports.TelegramHelperBotController = TelegramHelperBotController;
+
+
+/***/ }),
+
+/***/ "./libs/telegram/helper-bot/src/lib/telegram-helper-bot.module.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TelegramHelperBotModule = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const axios_1 = __webpack_require__("@nestjs/axios");
+const typeorm_1 = __webpack_require__("@nestjs/typeorm");
+const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
+const telegram_helper_bot_controller_1 = __webpack_require__("./libs/telegram/helper-bot/src/lib/telegram-helper-bot.controller.ts");
+const telegram_helper_bot_service_1 = __webpack_require__("./libs/telegram/helper-bot/src/lib/telegram-helper-bot.service.ts");
+let TelegramHelperBotModule = class TelegramHelperBotModule {
+};
+TelegramHelperBotModule = (0, tslib_1.__decorate)([
+    (0, common_1.Module)({
+        imports: [
+            axios_1.HttpModule,
+            typeorm_1.TypeOrmModule.forFeature([
+                storage_1.EventLoggerRecordEntity,
+            ]),
+        ],
+        controllers: [telegram_helper_bot_controller_1.TelegramHelperBotController],
+        providers: [telegram_helper_bot_service_1.TelegramHelperBotService],
+    })
+], TelegramHelperBotModule);
+exports.TelegramHelperBotModule = TelegramHelperBotModule;
+
+
+/***/ }),
+
+/***/ "./libs/telegram/helper-bot/src/lib/telegram-helper-bot.service.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TelegramHelperBotService = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const axios_1 = __webpack_require__("@nestjs/axios");
+let TelegramHelperBotService = class TelegramHelperBotService {
+    constructor(httpService) {
+        this.httpService = httpService;
+        const botUrl = `https://${process.env.HOST_URL}/telegram-helper-bot/${process.env.HELPER_BOT_TOKEN}`;
+        httpService
+            .post(`https://api.telegram.org/bot${process.env.HELPER_BOT_TOKEN}/setWebhook`, { URL: botUrl })
+            .toPromise()
+            .then(res => {
+            console.log(res === null || res === void 0 ? void 0 : res.data);
+            console.log('Бот успешно зарегистрирован по адресу: ' + botUrl);
+        })
+            .catch(err => {
+            console.error(err);
+        })
+            .finally(() => {
+            console.log('BOT!!!');
+        });
+    }
+};
+TelegramHelperBotService = (0, tslib_1.__decorate)([
+    (0, common_1.Injectable)(),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_a = typeof axios_1.HttpService !== "undefined" && axios_1.HttpService) === "function" ? _a : Object])
+], TelegramHelperBotService);
+exports.TelegramHelperBotService = TelegramHelperBotService;
+
+
+/***/ }),
+
 /***/ "./libs/users/server-module/src/index.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -758,6 +880,13 @@ exports["default"] = (() => {
 
 /***/ }),
 
+/***/ "@nestjs/axios":
+/***/ ((module) => {
+
+module.exports = require("@nestjs/axios");
+
+/***/ }),
+
 /***/ "@nestjs/common":
 /***/ ((module) => {
 
@@ -866,13 +995,13 @@ const common_1 = __webpack_require__("@nestjs/common");
 const core_1 = __webpack_require__("@nestjs/core");
 const app_module_1 = __webpack_require__("./apps/server/src/app.module.ts");
 const config_1 = __webpack_require__("@nestjs/config");
-const event_logger_1 = __webpack_require__("./libs/event-logger/src/index.ts");
 function bootstrap() {
     return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-        const app = yield core_1.NestFactory.create(app_module_1.AppModule, {
-            bufferLogs: true,
-            logger: new event_logger_1.EventLoggerService,
-        });
+        // const app = await NestFactory.create(AppModule, {
+        //   bufferLogs: true,
+        //   logger: new EventLoggerService,
+        // });
+        const app = yield core_1.NestFactory.create(app_module_1.AppModule);
         const configService = app.get(config_1.ConfigService);
         const port = configService.get('PORT');
         const globalPrefix = 'api';

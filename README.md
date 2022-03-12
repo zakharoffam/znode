@@ -4,6 +4,7 @@
 
 ```dotenv
 NODE_ENV=
+HOST_URL=
 PORT=
 DATABASE_URL=
 JWT_SECRET=

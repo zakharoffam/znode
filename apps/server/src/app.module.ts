@@ -6,6 +6,7 @@ import { StorageModule } from '@znode/storage';
 import { AuthModule } from '@znode/auth-server-module';
 import { UsersModule } from "@znode/users/server-module";
 import { EventLoggerModule } from '@znode/event-logger';
+import { TelegramHelperBotModule } from "@znode/telegram/helper-bot";
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { EventLoggerModule } from '@znode/event-logger';
     EventLoggerModule,
     // AuthModule,
     UsersModule,
+    TelegramHelperBotModule,
   ],
   controllers: [],
   providers: [],

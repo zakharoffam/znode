@@ -1,0 +1,23 @@
+{
+  "root": "libs/telegram/helper-bot",
+  "sourceRoot": "libs/telegram/helper-bot/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/telegram/helper-bot/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/telegram/helper-bot"],
+      "options": {
+        "jestConfig": "libs/telegram/helper-bot/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

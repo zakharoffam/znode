@@ -8,6 +8,7 @@
     "event-logger": "libs/event-logger",
     "server": "apps/server",
     "storage": "libs/storage",
+    "telegram-helper-bot": "libs/telegram/helper-bot",
     "users-server-module": "libs/users/server-module"
   }
 }

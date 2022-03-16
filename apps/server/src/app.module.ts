@@ -16,7 +16,7 @@ import { TelegramHelperBotModule } from "@znode/telegram/helper-bot";
     }),
     StorageModule,
     EventLoggerModule,
-    // AuthModule,
+    AuthModule,
     UsersModule,
     TelegramHelperBotModule,
   ],

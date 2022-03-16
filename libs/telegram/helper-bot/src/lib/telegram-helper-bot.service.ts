@@ -1,22 +1,22 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { HttpService } from "@nestjs/axios";
+import { Start, Update, On } from "nestjs-telegraf";
+import { Context } from "telegraf";
 
+@Update()
 @Injectable()
 export class TelegramHelperBotService {
-  constructor(private httpService: HttpService) {
-    const botUrl = `https://${process.env.HOST_URL}/telegram-helper-bot/${process.env.HELPER_BOT_TOKEN}`;
-    httpService
-      .post(`https://api.telegram.org/bot${process.env.HELPER_BOT_TOKEN}/setWebhook`, { URL: botUrl })
-      .toPromise()
-      .then(res => {
-        console.log(res?.data);
-        console.log('Бот успешно зарегистрирован по адресу: ' + botUrl);
-      })
-      .catch(err => {
-        console.error(err);
-      })
-      .finally(() => {
-        console.log('BOT!!!');
-      });
+  @Start()
+  public async startCommand(ctx: Context) {
+    Logger.log(`Новый пользователе телеграм-бота ${ctx}`, `TelegramHelperBotService.startCommand()`);
+    await ctx.reply('Привет!');
+  }
+
+  @On('message')
+  public async messageCommand(ctx: Context) {
+    Logger.log(ctx, `TelegramHelperBotService.messageCommand()`);
+    await ctx.reply('Я пока ничего не умею. :(');
+    setTimeout(async () => {
+      await ctx.reply('Но я обязательно научусь и сообщу тебе об этом! :)');
+    }, 1000);
   }
 }

@@ -14,6 +14,7 @@ const config_1 = __webpack_require__("@nestjs/config");
 const serve_static_1 = __webpack_require__("@nestjs/serve-static");
 const path_1 = __webpack_require__("path");
 const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
+const auth_server_module_1 = __webpack_require__("./libs/auth/server-module/src/index.ts");
 const server_module_1 = __webpack_require__("./libs/users/server-module/src/index.ts");
 const event_logger_1 = __webpack_require__("./libs/event-logger/src/index.ts");
 const helper_bot_1 = __webpack_require__("./libs/telegram/helper-bot/src/index.ts");
@@ -28,7 +29,7 @@ AppModule = (0, tslib_1.__decorate)([
             }),
             storage_1.StorageModule,
             event_logger_1.EventLoggerModule,
-            // AuthModule,
+            auth_server_module_1.AuthModule,
             server_module_1.UsersModule,
             helper_bot_1.TelegramHelperBotModule,
         ],
@@ -37,6 +38,359 @@ AppModule = (0, tslib_1.__decorate)([
     })
 ], AppModule);
 exports.AppModule = AppModule;
+
+
+/***/ }),
+
+/***/ "./libs/auth/server-module/src/index.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tslib_1 = __webpack_require__("tslib");
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/auth/server-module/src/lib/auth.module.ts"), exports);
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/auth/server-module/src/lib/current-user.decarator.ts"), exports);
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/auth/server-module/src/lib/sign-in.dto.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/auth/server-module/src/lib/auth.controller.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b, _c, _d, _e, _f;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthController = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const express_1 = __webpack_require__("express");
+const sign_in_dto_1 = __webpack_require__("./libs/auth/server-module/src/lib/sign-in.dto.ts");
+const current_user_decarator_1 = __webpack_require__("./libs/auth/server-module/src/lib/current-user.decarator.ts");
+const auth_service_1 = __webpack_require__("./libs/auth/server-module/src/lib/auth.service.ts");
+const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
+const sign_up_dto_1 = __webpack_require__("./libs/auth/server-module/src/lib/sign-up.dto.ts");
+const interfaces_1 = __webpack_require__("./libs/common/interfaces/src/index.ts");
+let AuthController = class AuthController {
+    constructor(authService) {
+        this.authService = authService;
+    }
+    /**
+     * Войти
+     * @url /api/auth/sign-in
+     * @param response
+     * @param data
+     */
+    signIn(data, response) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            const user = yield this.authService.checkEmailAndPassword(data.email, data.password);
+            const token = this.authService.encryptJwt(user);
+            response.setHeader('Authorization', `Bearer ${token}`);
+            response.send({
+                token: token,
+                user: user,
+            });
+            response.end();
+        });
+    }
+    /**
+     * Регистрация нового пользователя
+     * @param data
+     */
+    signUp(data) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            return yield storage_1.UserEntity.createUser(data.email, data.name, data.password);
+        });
+    }
+    /**
+     * Метод возвращает данные текущего пользователя пользователя
+     * @url /api/auth/current-user
+     * @param user
+     * @private
+     */
+    getUser(user) {
+        return user;
+    }
+};
+(0, tslib_1.__decorate)([
+    (0, common_1.Post)('sign-in'),
+    (0, tslib_1.__param)(0, (0, common_1.Body)()),
+    (0, tslib_1.__param)(1, (0, common_1.Res)()),
+    (0, tslib_1.__metadata)("design:type", Function),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_a = typeof sign_in_dto_1.SignInDto !== "undefined" && sign_in_dto_1.SignInDto) === "function" ? _a : Object, typeof (_b = typeof express_1.Response !== "undefined" && express_1.Response) === "function" ? _b : Object]),
+    (0, tslib_1.__metadata)("design:returntype", Promise)
+], AuthController.prototype, "signIn", null);
+(0, tslib_1.__decorate)([
+    (0, common_1.Post)('sign-up'),
+    (0, tslib_1.__param)(0, (0, common_1.Body)()),
+    (0, tslib_1.__metadata)("design:type", Function),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_c = typeof sign_up_dto_1.SignUpDto !== "undefined" && sign_up_dto_1.SignUpDto) === "function" ? _c : Object]),
+    (0, tslib_1.__metadata)("design:returntype", Promise)
+], AuthController.prototype, "signUp", null);
+(0, tslib_1.__decorate)([
+    (0, common_1.Get)('current-user'),
+    (0, tslib_1.__param)(0, (0, current_user_decarator_1.CurrentUser)()),
+    (0, tslib_1.__metadata)("design:type", Function),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_d = typeof interfaces_1.UserInterface !== "undefined" && interfaces_1.UserInterface) === "function" ? _d : Object]),
+    (0, tslib_1.__metadata)("design:returntype", typeof (_e = typeof interfaces_1.UserInterface !== "undefined" && interfaces_1.UserInterface) === "function" ? _e : Object)
+], AuthController.prototype, "getUser", null);
+AuthController = (0, tslib_1.__decorate)([
+    (0, common_1.Controller)('auth'),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_f = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _f : Object])
+], AuthController);
+exports.AuthController = AuthController;
+
+
+/***/ }),
+
+/***/ "./libs/auth/server-module/src/lib/auth.middleware.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthMiddleware = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const auth_service_1 = __webpack_require__("./libs/auth/server-module/src/lib/auth.service.ts");
+const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
+let AuthMiddleware = class AuthMiddleware {
+    constructor(authService) {
+        this.authService = authService;
+    }
+    /**
+     * Промежуточный обработчик аутентификации пользователя
+     * @param req
+     * @param res
+     * @param next
+     */
+    use(req, res, next) {
+        var _a;
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            const auth = req.headers['Authorization'];
+            common_1.Logger.log(auth);
+            if (!auth) {
+                // Если в запросе нет токена авторизации отправим клиента на страницу авторизации
+                throw new common_1.UnauthorizedException();
+            }
+            // Извлечем токен из заголовка авторизации
+            const inputToken = String(auth).replace('Bearer ', '');
+            // Расшифруем полученный токен
+            const decodeToken = this.authService.decryptJwt(inputToken);
+            if (!((_a = decodeToken === null || decodeToken === void 0 ? void 0 : decodeToken.user) === null || _a === void 0 ? void 0 : _a.email)) {
+                // Если в расшифрованном токене отсутствуют пользовательские данные токен явно поддельный
+                throw new common_1.UnauthorizedException();
+            }
+            let user = decodeToken.user;
+            if (Date.now() > Number(String(decodeToken.exp) + '000')) {
+                // Если срок действия токена просрочен, запросим новый токен и пользовательские данные
+                user = yield storage_1.UserEntity.getUserByEmail(decodeToken.user.email);
+                const newToken = this.authService.encryptJwt(user);
+                // Обновим токен клиенту
+                res.setHeader('Authorization', `Bearer ${newToken}`);
+            }
+            req.user = user;
+            next();
+        });
+    }
+};
+AuthMiddleware = (0, tslib_1.__decorate)([
+    (0, common_1.Injectable)(),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
+], AuthMiddleware);
+exports.AuthMiddleware = AuthMiddleware;
+
+
+/***/ }),
+
+/***/ "./libs/auth/server-module/src/lib/auth.module.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthModule = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const typeorm_1 = __webpack_require__("@nestjs/typeorm");
+const auth_controller_1 = __webpack_require__("./libs/auth/server-module/src/lib/auth.controller.ts");
+const auth_middleware_1 = __webpack_require__("./libs/auth/server-module/src/lib/auth.middleware.ts");
+const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
+const auth_service_1 = __webpack_require__("./libs/auth/server-module/src/lib/auth.service.ts");
+const jwt_1 = __webpack_require__("@nestjs/jwt");
+let AuthModule = class AuthModule {
+    configure(consumer) {
+        consumer
+            .apply(auth_middleware_1.AuthMiddleware)
+            .exclude({ path: 'api/auth/sign-in', method: common_1.RequestMethod.POST }, { path: 'api/users', method: common_1.RequestMethod.POST })
+            .forRoutes({ path: '*', method: common_1.RequestMethod.ALL });
+    }
+};
+AuthModule = (0, tslib_1.__decorate)([
+    (0, common_1.Module)({
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([storage_1.UserEntity, storage_1.UserPasswordEntity]),
+            jwt_1.JwtModule.register({
+                secret: process.env.JWT_SECRET,
+                signOptions: { expiresIn: '180s' },
+            }),
+        ],
+        controllers: [auth_controller_1.AuthController],
+        providers: [auth_service_1.AuthService],
+    })
+], AuthModule);
+exports.AuthModule = AuthModule;
+
+
+/***/ }),
+
+/***/ "./libs/auth/server-module/src/lib/auth.service.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthService = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
+const jwt_1 = __webpack_require__("@nestjs/jwt");
+let AuthService = class AuthService {
+    constructor(jwtService) {
+        this.jwtService = jwtService;
+    }
+    /**
+     * Проверка адреса электропочты и пароля
+     * @param email
+     * @param password
+     */
+    checkEmailAndPassword(email, password) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            const user = yield storage_1.UserEntity.findOne({ where: { email: email } });
+            if (!user) {
+                throw new common_1.UnauthorizedException(`${email} не зарегистрирован!`, `AuthLocalStrategy.validate()`);
+            }
+            const checkPassword = yield storage_1.UserPasswordEntity.isPasswordOfUser(user, password);
+            if (!checkPassword) {
+                throw new common_1.UnauthorizedException(`Неверный пароль!`, `AuthLocalStrategy.validate()`);
+            }
+            if (!user.isActive) {
+                throw new common_1.ForbiddenException(`Доступ запрещен!`, `AuthLocalStrategy.validate()`);
+            }
+            return user;
+        });
+    }
+    /**
+     * Зашифровать токен JWT
+     * @param user
+     */
+    encryptJwt(user) {
+        const payload = { user };
+        return this.jwtService.sign(payload);
+    }
+    /**
+     * Расшифровать токен JWT
+     * @param token
+     */
+    decryptJwt(token) {
+        return this.jwtService.verify(token);
+    }
+};
+AuthService = (0, tslib_1.__decorate)([
+    (0, common_1.Injectable)(),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_a = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _a : Object])
+], AuthService);
+exports.AuthService = AuthService;
+
+
+/***/ }),
+
+/***/ "./libs/auth/server-module/src/lib/current-user.decarator.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CurrentUser = void 0;
+const common_1 = __webpack_require__("@nestjs/common");
+/**
+ * Декоратор возвращающий данные текущего пользователя
+ */
+exports.CurrentUser = (0, common_1.createParamDecorator)((ctx) => {
+    const request = ctx.switchToHttp().getRequest();
+    return request.user;
+});
+
+
+/***/ }),
+
+/***/ "./libs/auth/server-module/src/lib/sign-in.dto.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SignInDto = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const class_validator_1 = __webpack_require__("class-validator");
+class SignInDto {
+}
+(0, tslib_1.__decorate)([
+    (0, class_validator_1.IsEmail)(),
+    (0, tslib_1.__metadata)("design:type", String)
+], SignInDto.prototype, "email", void 0);
+(0, tslib_1.__decorate)([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Length)(1, 64),
+    (0, tslib_1.__metadata)("design:type", String)
+], SignInDto.prototype, "password", void 0);
+exports.SignInDto = SignInDto;
+
+
+/***/ }),
+
+/***/ "./libs/auth/server-module/src/lib/sign-up.dto.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SignUpDto = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const class_validator_1 = __webpack_require__("class-validator");
+class SignUpDto {
+}
+(0, tslib_1.__decorate)([
+    (0, class_validator_1.IsEmail)(),
+    (0, tslib_1.__metadata)("design:type", String)
+], SignUpDto.prototype, "email", void 0);
+(0, tslib_1.__decorate)([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Length)(1, 255),
+    (0, tslib_1.__metadata)("design:type", String)
+], SignUpDto.prototype, "name", void 0);
+(0, tslib_1.__decorate)([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Length)(1, 64),
+    (0, tslib_1.__metadata)("design:type", String)
+], SignUpDto.prototype, "password", void 0);
+exports.SignUpDto = SignUpDto;
+
+
+/***/ }),
+
+/***/ "./libs/common/interfaces/src/index.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tslib_1 = __webpack_require__("tslib");
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/common/interfaces/src/lib/user.interface.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/common/interfaces/src/lib/user.interface.ts":
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 
 /***/ }),
@@ -563,45 +917,6 @@ const tslib_1 = __webpack_require__("tslib");
 
 /***/ }),
 
-/***/ "./libs/telegram/helper-bot/src/lib/telegram-helper-bot.controller.ts":
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-var _a, _b;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.TelegramHelperBotController = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const common_1 = __webpack_require__("@nestjs/common");
-const telegram_helper_bot_service_1 = __webpack_require__("./libs/telegram/helper-bot/src/lib/telegram-helper-bot.service.ts");
-let TelegramHelperBotController = class TelegramHelperBotController {
-    constructor(telegramHelperBotService) {
-        this.telegramHelperBotService = telegramHelperBotService;
-    }
-    update(data) {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            common_1.Logger.log('TELEGRAM_HELPER_BOT');
-            common_1.Logger.log('input_data: ');
-            common_1.Logger.log(data);
-            return 'Ok';
-        });
-    }
-};
-(0, tslib_1.__decorate)([
-    (0, common_1.Post)(process.env.HELPER_BOT_TOKEN),
-    (0, tslib_1.__param)(0, (0, common_1.Body)()),
-    (0, tslib_1.__metadata)("design:type", Function),
-    (0, tslib_1.__metadata)("design:paramtypes", [Object]),
-    (0, tslib_1.__metadata)("design:returntype", typeof (_a = typeof Promise !== "undefined" && Promise) === "function" ? _a : Object)
-], TelegramHelperBotController.prototype, "update", null);
-TelegramHelperBotController = (0, tslib_1.__decorate)([
-    (0, common_1.Controller)('telegram-helper-bot'),
-    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_b = typeof telegram_helper_bot_service_1.TelegramHelperBotService !== "undefined" && telegram_helper_bot_service_1.TelegramHelperBotService) === "function" ? _b : Object])
-], TelegramHelperBotController);
-exports.TelegramHelperBotController = TelegramHelperBotController;
-
-
-/***/ }),
-
 /***/ "./libs/telegram/helper-bot/src/lib/telegram-helper-bot.module.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -610,22 +925,22 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TelegramHelperBotModule = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
-const axios_1 = __webpack_require__("@nestjs/axios");
 const typeorm_1 = __webpack_require__("@nestjs/typeorm");
 const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
-const telegram_helper_bot_controller_1 = __webpack_require__("./libs/telegram/helper-bot/src/lib/telegram-helper-bot.controller.ts");
+const nestjs_telegraf_1 = __webpack_require__("nestjs-telegraf");
 const telegram_helper_bot_service_1 = __webpack_require__("./libs/telegram/helper-bot/src/lib/telegram-helper-bot.service.ts");
 let TelegramHelperBotModule = class TelegramHelperBotModule {
 };
 TelegramHelperBotModule = (0, tslib_1.__decorate)([
     (0, common_1.Module)({
         imports: [
-            axios_1.HttpModule,
             typeorm_1.TypeOrmModule.forFeature([
                 storage_1.EventLoggerRecordEntity,
             ]),
+            nestjs_telegraf_1.TelegrafModule.forRoot({
+                token: String(process.env.HELPER_BOT_TOKEN),
+            }),
         ],
-        controllers: [telegram_helper_bot_controller_1.TelegramHelperBotController],
         providers: [telegram_helper_bot_service_1.TelegramHelperBotService],
     })
 ], TelegramHelperBotModule);
@@ -638,34 +953,45 @@ exports.TelegramHelperBotModule = TelegramHelperBotModule;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TelegramHelperBotService = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
-const axios_1 = __webpack_require__("@nestjs/axios");
+const nestjs_telegraf_1 = __webpack_require__("nestjs-telegraf");
+const telegraf_1 = __webpack_require__("telegraf");
 let TelegramHelperBotService = class TelegramHelperBotService {
-    constructor(httpService) {
-        this.httpService = httpService;
-        const botUrl = `https://${process.env.HOST_URL}/telegram-helper-bot/${process.env.HELPER_BOT_TOKEN}`;
-        httpService
-            .post(`https://api.telegram.org/bot${process.env.HELPER_BOT_TOKEN}/setWebhook`, { URL: botUrl })
-            .toPromise()
-            .then(res => {
-            console.log(res === null || res === void 0 ? void 0 : res.data);
-            console.log('Бот успешно зарегистрирован по адресу: ' + botUrl);
-        })
-            .catch(err => {
-            console.error(err);
-        })
-            .finally(() => {
-            console.log('BOT!!!');
+    startCommand(ctx) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            common_1.Logger.log(`Новый пользователе телеграм-бота ${ctx}`, `TelegramHelperBotService.startCommand()`);
+            yield ctx.reply('Привет!');
+        });
+    }
+    messageCommand(ctx) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            common_1.Logger.log(ctx, `TelegramHelperBotService.messageCommand()`);
+            yield ctx.reply('Я пока ничего не умею. :(');
+            setTimeout(() => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+                yield ctx.reply('Но я обязательно научусь и сообщу тебе об этом! :)');
+            }), 1000);
         });
     }
 };
+(0, tslib_1.__decorate)([
+    (0, nestjs_telegraf_1.Start)(),
+    (0, tslib_1.__metadata)("design:type", Function),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_a = typeof telegraf_1.Context !== "undefined" && telegraf_1.Context) === "function" ? _a : Object]),
+    (0, tslib_1.__metadata)("design:returntype", Promise)
+], TelegramHelperBotService.prototype, "startCommand", null);
+(0, tslib_1.__decorate)([
+    (0, nestjs_telegraf_1.On)('message'),
+    (0, tslib_1.__metadata)("design:type", Function),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_b = typeof telegraf_1.Context !== "undefined" && telegraf_1.Context) === "function" ? _b : Object]),
+    (0, tslib_1.__metadata)("design:returntype", Promise)
+], TelegramHelperBotService.prototype, "messageCommand", null);
 TelegramHelperBotService = (0, tslib_1.__decorate)([
-    (0, common_1.Injectable)(),
-    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_a = typeof axios_1.HttpService !== "undefined" && axios_1.HttpService) === "function" ? _a : Object])
+    (0, nestjs_telegraf_1.Update)(),
+    (0, common_1.Injectable)()
 ], TelegramHelperBotService);
 exports.TelegramHelperBotService = TelegramHelperBotService;
 
@@ -880,13 +1206,6 @@ exports["default"] = (() => {
 
 /***/ }),
 
-/***/ "@nestjs/axios":
-/***/ ((module) => {
-
-module.exports = require("@nestjs/axios");
-
-/***/ }),
-
 /***/ "@nestjs/common":
 /***/ ((module) => {
 
@@ -905,6 +1224,13 @@ module.exports = require("@nestjs/config");
 /***/ ((module) => {
 
 module.exports = require("@nestjs/core");
+
+/***/ }),
+
+/***/ "@nestjs/jwt":
+/***/ ((module) => {
+
+module.exports = require("@nestjs/jwt");
 
 /***/ }),
 
@@ -933,6 +1259,27 @@ module.exports = require("argon2");
 /***/ ((module) => {
 
 module.exports = require("class-validator");
+
+/***/ }),
+
+/***/ "express":
+/***/ ((module) => {
+
+module.exports = require("express");
+
+/***/ }),
+
+/***/ "nestjs-telegraf":
+/***/ ((module) => {
+
+module.exports = require("nestjs-telegraf");
+
+/***/ }),
+
+/***/ "telegraf":
+/***/ ((module) => {
+
+module.exports = require("telegraf");
 
 /***/ }),
 

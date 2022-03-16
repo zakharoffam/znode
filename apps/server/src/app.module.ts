@@ -7,6 +7,7 @@ import { AuthModule } from '@znode/auth-server-module';
 import { UsersModule } from "@znode/users/server-module";
 import { EventLoggerModule } from '@znode/event-logger';
 import { TelegramHelperBotModule } from "@znode/telegram/helper-bot";
+import { ScheduleModule } from "@nestjs/schedule";
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { TelegramHelperBotModule } from "@znode/telegram/helper-bot";
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
     }),
+    ScheduleModule.forRoot(),
     StorageModule,
     EventLoggerModule,
     AuthModule,

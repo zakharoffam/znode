@@ -18,6 +18,7 @@ const auth_server_module_1 = __webpack_require__("./libs/auth/server-module/src/
 const server_module_1 = __webpack_require__("./libs/users/server-module/src/index.ts");
 const event_logger_1 = __webpack_require__("./libs/event-logger/src/index.ts");
 const helper_bot_1 = __webpack_require__("./libs/telegram/helper-bot/src/index.ts");
+const schedule_1 = __webpack_require__("@nestjs/schedule");
 let AppModule = class AppModule {
 };
 AppModule = (0, tslib_1.__decorate)([
@@ -27,6 +28,7 @@ AppModule = (0, tslib_1.__decorate)([
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, '..', 'client'),
             }),
+            schedule_1.ScheduleModule.forRoot(),
             storage_1.StorageModule,
             event_logger_1.EventLoggerModule,
             auth_server_module_1.AuthModule,
@@ -577,6 +579,7 @@ const tslib_1 = __webpack_require__("tslib");
 (0, tslib_1.__exportStar)(__webpack_require__("./libs/storage/src/lib/entities/user-password.entity.ts"), exports);
 (0, tslib_1.__exportStar)(__webpack_require__("./libs/storage/src/lib/entities/role.entity.ts"), exports);
 (0, tslib_1.__exportStar)(__webpack_require__("./libs/storage/src/lib/entities/event-logger-record.entity.ts"), exports);
+(0, tslib_1.__exportStar)(__webpack_require__("./libs/storage/src/lib/entities/teleram-update.entity.ts"), exports);
 
 
 /***/ }),
@@ -678,6 +681,49 @@ RoleEntity = (0, tslib_1.__decorate)([
     (0, typeorm_1.Entity)('Roles')
 ], RoleEntity);
 exports.RoleEntity = RoleEntity;
+
+
+/***/ }),
+
+/***/ "./libs/storage/src/lib/entities/teleram-update.entity.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var TeleramUpdateEntity_1, _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TeleramUpdateEntity = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const typeorm_1 = __webpack_require__("typeorm");
+let TeleramUpdateEntity = TeleramUpdateEntity_1 = class TeleramUpdateEntity extends typeorm_1.BaseEntity {
+    /**
+     * Добавить запись
+     * @param message
+     */
+    static addRecord(message) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            let record = new TeleramUpdateEntity_1();
+            record.message = message;
+            record = yield this.save(record);
+            return record;
+        });
+    }
+};
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, tslib_1.__metadata)("design:type", String)
+], TeleramUpdateEntity.prototype, "id", void 0);
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.CreateDateColumn)(),
+    (0, tslib_1.__metadata)("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], TeleramUpdateEntity.prototype, "timestamp", void 0);
+(0, tslib_1.__decorate)([
+    (0, typeorm_1.Column)({ type: 'varchar' }),
+    (0, tslib_1.__metadata)("design:type", String)
+], TeleramUpdateEntity.prototype, "message", void 0);
+TeleramUpdateEntity = TeleramUpdateEntity_1 = (0, tslib_1.__decorate)([
+    (0, typeorm_1.Entity)('Telegram_update')
+], TeleramUpdateEntity);
+exports.TeleramUpdateEntity = TeleramUpdateEntity;
 
 
 /***/ }),
@@ -936,6 +982,7 @@ TelegramHelperBotModule = (0, tslib_1.__decorate)([
         imports: [
             typeorm_1.TypeOrmModule.forFeature([
                 storage_1.EventLoggerRecordEntity,
+                storage_1.TeleramUpdateEntity,
             ]),
             nestjs_telegraf_1.TelegrafModule.forRoot({
                 token: String(process.env.HELPER_BOT_TOKEN),
@@ -960,20 +1007,30 @@ const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
 const nestjs_telegraf_1 = __webpack_require__("nestjs-telegraf");
 const telegraf_1 = __webpack_require__("telegraf");
+const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
 let TelegramHelperBotService = class TelegramHelperBotService {
     startCommand(ctx) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             common_1.Logger.log(`Новый пользователе телеграм-бота ${ctx}`, `TelegramHelperBotService.startCommand()`);
+            yield storage_1.TeleramUpdateEntity.addRecord(JSON.stringify(ctx.update));
             yield ctx.reply('Привет!');
         });
     }
     messageCommand(ctx) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            common_1.Logger.log(ctx, `TelegramHelperBotService.messageCommand()`);
-            yield ctx.reply('Я пока ничего не умею. :(');
-            setTimeout(() => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-                yield ctx.reply('Но я обязательно научусь и сообщу тебе об этом! :)');
-            }), 1000);
+            yield storage_1.TeleramUpdateEntity.addRecord(JSON.stringify(ctx.update));
+            // @ts-ignore
+            if (ctx.update && ctx.update.message.text === 'Статистика') {
+                const allRecords = yield storage_1.TeleramUpdateEntity.find({ order: { timestamp: 'DESC' }, take: 5 });
+                yield ctx.reply(JSON.stringify(allRecords));
+            }
+            else {
+                common_1.Logger.log(JSON.stringify(ctx.update), `TelegramHelperBotService.messageCommand()`);
+                yield ctx.reply('Я пока ничего не умею. :(');
+                setTimeout(() => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+                    yield ctx.reply('Но я обязательно научусь и сообщу тебе об этом! :)');
+                }), 1000);
+            }
         });
     }
 };
@@ -1231,6 +1288,13 @@ module.exports = require("@nestjs/core");
 /***/ ((module) => {
 
 module.exports = require("@nestjs/jwt");
+
+/***/ }),
+
+/***/ "@nestjs/schedule":
+/***/ ((module) => {
+
+module.exports = require("@nestjs/schedule");
 
 /***/ }),
 

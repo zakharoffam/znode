@@ -1014,12 +1014,14 @@ let TelegramHelperBotService = class TelegramHelperBotService {
             yield storage_1.TeleramUpdateEntity.addRecord(JSON.stringify(ctx.update));
             yield ctx.reply('Привет!');
             yield ctx.reply('👋');
+            common_1.Logger.log('Новый чат!', 'TelegramHelperBotService.startCommand()');
             yield ctx.tg.sendMessage(1040890736, 'К боту подключился новый пользователь!');
         });
     }
     messageCommand(ctx) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             yield storage_1.TeleramUpdateEntity.addRecord(JSON.stringify(ctx.update));
+            common_1.Logger.log('Новое сообщение!', 'TelegramHelperBotService.messageCommand()');
             yield ctx.reply('Привет!');
             yield ctx.reply('👋');
             setTimeout(() => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
@@ -1036,6 +1038,7 @@ let TelegramHelperBotService = class TelegramHelperBotService {
     }
     onAnswer(ctx) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            common_1.Logger.log('Новое действие!', 'TelegramHelperBotService.onAnswer()');
             if ("callback_query" in ctx.update) {
                 const query = ctx.update.callback_query;
                 const userAnswer = 'data' in query ? query.data : null;

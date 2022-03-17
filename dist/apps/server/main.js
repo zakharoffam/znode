@@ -1000,7 +1000,7 @@ exports.TelegramHelperBotModule = TelegramHelperBotModule;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b;
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TelegramHelperBotService = void 0;
 const tslib_1 = __webpack_require__("tslib");
@@ -1011,9 +1011,9 @@ const storage_1 = __webpack_require__("./libs/storage/src/index.ts");
 let TelegramHelperBotService = class TelegramHelperBotService {
     startCommand(ctx) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            common_1.Logger.log(`Новый пользователе телеграм-бота ${ctx}`, `TelegramHelperBotService.startCommand()`);
             yield storage_1.TeleramUpdateEntity.addRecord(JSON.stringify(ctx.update));
             yield ctx.reply('Привет!');
+            yield ctx.reply('👋');
         });
     }
     messageCommand(ctx) {
@@ -1025,11 +1025,40 @@ let TelegramHelperBotService = class TelegramHelperBotService {
                 yield ctx.reply(JSON.stringify(allRecords));
             }
             else {
-                common_1.Logger.log(JSON.stringify(ctx.update), `TelegramHelperBotService.messageCommand()`);
-                yield ctx.reply('Я пока ничего не умею. :(');
+                yield ctx.reply('Привет!');
+                yield ctx.reply('👋');
                 setTimeout(() => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-                    yield ctx.reply('Но я обязательно научусь и сообщу тебе об этом! :)');
+                    yield ctx.reply('Сколько будет 2 + 2?', {
+                        reply_markup: {
+                            inline_keyboard: [
+                                [{ text: '4', callback_data: '4' }],
+                                [{ text: '8', callback_data: '8' }]
+                            ]
+                        }
+                    });
                 }), 1000);
+            }
+        });
+    }
+    onAnswer(ctx) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            if ("callback_query" in ctx.update) {
+                const query = ctx.update.callback_query;
+                const userAnswer = 'data' in query ? query.data : null;
+                yield ctx.reply('Тут надо подумать...');
+                yield ctx.reply('🤔');
+                if (userAnswer === '4') {
+                    setTimeout(() => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+                        yield ctx.reply('Правильно!');
+                        yield ctx.reply('🥳');
+                    }), 2500);
+                }
+                else {
+                    setTimeout(() => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+                        yield ctx.reply('К сожалению это не верный ответ.');
+                        yield ctx.reply('🤪');
+                    }), 1000);
+                }
             }
         });
     }
@@ -1046,6 +1075,12 @@ let TelegramHelperBotService = class TelegramHelperBotService {
     (0, tslib_1.__metadata)("design:paramtypes", [typeof (_b = typeof telegraf_1.Context !== "undefined" && telegraf_1.Context) === "function" ? _b : Object]),
     (0, tslib_1.__metadata)("design:returntype", Promise)
 ], TelegramHelperBotService.prototype, "messageCommand", null);
+(0, tslib_1.__decorate)([
+    (0, nestjs_telegraf_1.Action)(['4', '8']),
+    (0, tslib_1.__metadata)("design:type", Function),
+    (0, tslib_1.__metadata)("design:paramtypes", [typeof (_c = typeof telegraf_1.Context !== "undefined" && telegraf_1.Context) === "function" ? _c : Object]),
+    (0, tslib_1.__metadata)("design:returntype", Promise)
+], TelegramHelperBotService.prototype, "onAnswer", null);
 TelegramHelperBotService = (0, tslib_1.__decorate)([
     (0, nestjs_telegraf_1.Update)(),
     (0, common_1.Injectable)()

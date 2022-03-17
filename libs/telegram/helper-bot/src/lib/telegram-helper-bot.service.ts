@@ -6,34 +6,31 @@ import { TeleramUpdateEntity } from "@znode/storage";
 @Update()
 @Injectable()
 export class TelegramHelperBotService {
+
   @Start()
   public async startCommand(ctx: Context) {
     await TeleramUpdateEntity.addRecord(JSON.stringify(ctx.update));
     await ctx.reply('Привет!');
     await ctx.reply('👋');
+
+    await ctx.tg.sendMessage(1040890736, 'К боту подключился новый пользователь!');
   }
 
   @On('message')
   public async messageCommand(ctx: Context) {
     await TeleramUpdateEntity.addRecord(JSON.stringify(ctx.update));
-    // @ts-ignore
-    if (ctx.update && ctx.update.message.text === 'Статистика') {
-      const allRecords = await TeleramUpdateEntity.find({ order: { timestamp: 'DESC' }, take: 5 });
-      await ctx.reply(JSON.stringify(allRecords));
-    } else {
-      await ctx.reply('Привет!');
-      await ctx.reply('👋');
-      setTimeout(async () => {
-        await ctx.reply('Сколько будет 2 + 2?', {
-          reply_markup: {
-            inline_keyboard: [
-              [{ text: '4', callback_data: '4'}],
-              [{ text: '8', callback_data: '8'}]
-            ]
-          }
-        })
-      }, 1000);
-    }
+    await ctx.reply('Привет!');
+    await ctx.reply('👋');
+    setTimeout(async () => {
+      await ctx.reply('Сколько будет 2 + 2?', {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: '4', callback_data: '4'}],
+            [{ text: '8', callback_data: '8'}]
+          ]
+        }
+      })
+    }, 1000);
   }
 
   @Action(['4', '8'])
@@ -44,6 +41,7 @@ export class TelegramHelperBotService {
 
       await ctx.reply('Тут надо подумать...');
       await ctx.reply('🤔');
+      await ctx.tg.sendChatAction(1040890736, 'typing');
 
       if (userAnswer === '4') {
         setTimeout(async () => {

@@ -1014,30 +1014,24 @@ let TelegramHelperBotService = class TelegramHelperBotService {
             yield storage_1.TeleramUpdateEntity.addRecord(JSON.stringify(ctx.update));
             yield ctx.reply('Привет!');
             yield ctx.reply('👋');
+            yield ctx.tg.sendMessage(1040890736, 'К боту подключился новый пользователь!');
         });
     }
     messageCommand(ctx) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             yield storage_1.TeleramUpdateEntity.addRecord(JSON.stringify(ctx.update));
-            // @ts-ignore
-            if (ctx.update && ctx.update.message.text === 'Статистика') {
-                const allRecords = yield storage_1.TeleramUpdateEntity.find({ order: { timestamp: 'DESC' }, take: 5 });
-                yield ctx.reply(JSON.stringify(allRecords));
-            }
-            else {
-                yield ctx.reply('Привет!');
-                yield ctx.reply('👋');
-                setTimeout(() => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-                    yield ctx.reply('Сколько будет 2 + 2?', {
-                        reply_markup: {
-                            inline_keyboard: [
-                                [{ text: '4', callback_data: '4' }],
-                                [{ text: '8', callback_data: '8' }]
-                            ]
-                        }
-                    });
-                }), 1000);
-            }
+            yield ctx.reply('Привет!');
+            yield ctx.reply('👋');
+            setTimeout(() => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+                yield ctx.reply('Сколько будет 2 + 2?', {
+                    reply_markup: {
+                        inline_keyboard: [
+                            [{ text: '4', callback_data: '4' }],
+                            [{ text: '8', callback_data: '8' }]
+                        ]
+                    }
+                });
+            }), 1000);
         });
     }
     onAnswer(ctx) {
@@ -1047,6 +1041,7 @@ let TelegramHelperBotService = class TelegramHelperBotService {
                 const userAnswer = 'data' in query ? query.data : null;
                 yield ctx.reply('Тут надо подумать...');
                 yield ctx.reply('🤔');
+                yield ctx.tg.sendChatAction(1040890736, 'typing');
                 if (userAnswer === '4') {
                     setTimeout(() => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
                         yield ctx.reply('Правильно!');

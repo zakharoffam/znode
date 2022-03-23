@@ -18,6 +18,7 @@
     "paths": {
       "@znode/auth-server-module": ["libs/auth/server-module/src/index.ts"],
       "@znode/auth-web-pages": ["libs/auth/web-pages/src/index.ts"],
+      "@znode/client/header": ["libs/client/header/src/index.ts"],
       "@znode/common-client-error-interceptor": [
         "libs/common/client/error-interceptor/src/index.ts"
       ],

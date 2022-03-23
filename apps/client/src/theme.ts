@@ -2,11 +2,51 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import { createTheme } from '@mui/material';
+import { createTheme, ThemeOptions } from '@mui/material';
 
-export const theme = (mode?: 'light' | 'dark') =>
-  createTheme({
-    palette: {
-      mode: mode ?? 'light',
+/**
+ * Светлая тема приложения
+ */
+const lightTheme: ThemeOptions = {
+  palette: {
+    mode: 'light',
+    background: {
+      default: '#FFFFFF',
+      paper: '#FFFFFF',
     },
-  });
+  },
+  shape: {
+    borderRadius: 16,
+  },
+};
+
+/**
+ * Темная тема приложения
+ */
+const darkTheme: ThemeOptions = {
+  palette: {
+    mode: 'dark',
+    background: {
+      default: '#000000',
+      paper: '#000000',
+    },
+    text: {
+      primary: '#bdbdbd',
+    },
+  },
+  shape: {
+    borderRadius: 16,
+  },
+};
+
+
+const setTheme = (mode?: 'light' | 'dark') => {
+  switch (mode) {
+    case 'light': return lightTheme
+    case 'dark': return darkTheme
+    default: return lightTheme
+  }
+}
+
+
+export const theme = (mode?: 'light' | 'dark') => createTheme(setTheme(mode));

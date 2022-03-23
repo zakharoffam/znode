@@ -8,8 +8,6 @@ export function AuthPage() {
   const [password, setPassword] = useState('');
   const [result, setResult] = useState('');
 
-  const [test, setTest] = useState();
-
   const send = () => {
     axios
       .post<{ token: string, user: UserInterface }>('/api/auth/sign-in', { email, password })
@@ -42,12 +40,6 @@ export function AuthPage() {
       >
         Войти
       </Button>
-      <Button
-        onClick={() => testConnect()}
-      >
-        Test
-      </Button>
-      <Typography variant="h5">{test}</Typography>
     </Box>
   );
 }

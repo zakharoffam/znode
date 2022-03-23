@@ -15,11 +15,10 @@ import { AuthPage } from "./pages/auth.page";
 
 export default function App() {
   return (
-    <ThemeProvider theme={theme()}>
+    <ThemeProvider theme={theme('dark')}>
       {/*Перехватываем ошибки возникающие в виртуальном DOM*/}
       <ErrorInterceptor appName="WebClient">
         <CssBaseline />
-        <p>WEB CLIENT</p>
         {/*Отображает прогресс-бар в момент загрузки lazy-компонентов*/}
         <Suspense fallback={<LinearProgress />}>
           <Routes>

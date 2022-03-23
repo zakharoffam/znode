@@ -1018,22 +1018,27 @@ let TelegramHelperBotService = class TelegramHelperBotService {
             yield ctx.tg.sendMessage(1040890736, 'К боту подключился новый пользователь!');
         });
     }
-    messageCommand(ctx) {
+    // @On('message')
+    // public async messageCommand(ctx: Context) {
+    //   await TeleramUpdateEntity.addRecord(JSON.stringify(ctx.update));
+    //   Logger.log('Новое сообщение!', 'TelegramHelperBotService.messageCommand()');
+    //   await ctx.reply('Привет!');
+    //   await ctx.reply('👋');
+    //   setTimeout(async () => {
+    //     await ctx.reply('Сколько будет 2 + 2?', {
+    //       reply_markup: {
+    //         inline_keyboard: [
+    //           [{ text: '4', callback_data: '4'}],
+    //           [{ text: '8', callback_data: '8'}]
+    //         ]
+    //       }
+    //     })
+    //   }, 1000);
+    // }
+    getMe(ctx) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            yield storage_1.TeleramUpdateEntity.addRecord(JSON.stringify(ctx.update));
-            common_1.Logger.log('Новое сообщение!', 'TelegramHelperBotService.messageCommand()');
-            yield ctx.reply('Привет!');
-            yield ctx.reply('👋');
-            setTimeout(() => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-                yield ctx.reply('Сколько будет 2 + 2?', {
-                    reply_markup: {
-                        inline_keyboard: [
-                            [{ text: '4', callback_data: '4' }],
-                            [{ text: '8', callback_data: '8' }]
-                        ]
-                    }
-                });
-            }), 1000);
+            console.log(yield ctx.tg.getMe());
+            yield ctx.reply('1');
         });
     }
     onAnswer(ctx) {
@@ -1068,11 +1073,11 @@ let TelegramHelperBotService = class TelegramHelperBotService {
     (0, tslib_1.__metadata)("design:returntype", Promise)
 ], TelegramHelperBotService.prototype, "startCommand", null);
 (0, tslib_1.__decorate)([
-    (0, nestjs_telegraf_1.On)('message'),
+    (0, nestjs_telegraf_1.Hears)('1'),
     (0, tslib_1.__metadata)("design:type", Function),
     (0, tslib_1.__metadata)("design:paramtypes", [typeof (_b = typeof telegraf_1.Context !== "undefined" && telegraf_1.Context) === "function" ? _b : Object]),
     (0, tslib_1.__metadata)("design:returntype", Promise)
-], TelegramHelperBotService.prototype, "messageCommand", null);
+], TelegramHelperBotService.prototype, "getMe", null);
 (0, tslib_1.__decorate)([
     (0, nestjs_telegraf_1.Action)(['4', '8']),
     (0, tslib_1.__metadata)("design:type", Function),

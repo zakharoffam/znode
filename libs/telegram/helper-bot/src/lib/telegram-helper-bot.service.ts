@@ -1,5 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { Start, Update, On, Action } from "nestjs-telegraf";
+import { Start, Update, On, Action, Hears } from "nestjs-telegraf";
 import { Context } from "telegraf";
 import { TeleramUpdateEntity } from "@znode/storage";
 
@@ -16,23 +16,31 @@ export class TelegramHelperBotService {
     await ctx.tg.sendMessage(1040890736, 'К боту подключился новый пользователь!');
   }
 
-  @On('message')
-  public async messageCommand(ctx: Context) {
-    await TeleramUpdateEntity.addRecord(JSON.stringify(ctx.update));
-    Logger.log('Новое сообщение!', 'TelegramHelperBotService.messageCommand()');
-    await ctx.reply('Привет!');
-    await ctx.reply('👋');
-    setTimeout(async () => {
-      await ctx.reply('Сколько будет 2 + 2?', {
-        reply_markup: {
-          inline_keyboard: [
-            [{ text: '4', callback_data: '4'}],
-            [{ text: '8', callback_data: '8'}]
-          ]
-        }
-      })
-    }, 1000);
+  // @On('message')
+  // public async messageCommand(ctx: Context) {
+  //   await TeleramUpdateEntity.addRecord(JSON.stringify(ctx.update));
+  //   Logger.log('Новое сообщение!', 'TelegramHelperBotService.messageCommand()');
+  //   await ctx.reply('Привет!');
+  //   await ctx.reply('👋');
+  //   setTimeout(async () => {
+  //     await ctx.reply('Сколько будет 2 + 2?', {
+  //       reply_markup: {
+  //         inline_keyboard: [
+  //           [{ text: '4', callback_data: '4'}],
+  //           [{ text: '8', callback_data: '8'}]
+  //         ]
+  //       }
+  //     })
+  //   }, 1000);
+  // }
+
+
+  @Hears('1')
+  public async getMe(ctx: Context) {
+    console.log(await ctx.tg.getMe());
+    await ctx.reply('1');
   }
+
 
   @Action(['4', '8'])
   public async onAnswer(ctx: Context) {

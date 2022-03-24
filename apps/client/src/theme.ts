@@ -16,7 +16,7 @@ const lightTheme: ThemeOptions = {
     },
   },
   shape: {
-    borderRadius: 16,
+    borderRadius: 8,
   },
 };
 
@@ -31,11 +31,11 @@ const darkTheme: ThemeOptions = {
       paper: '#000000',
     },
     text: {
-      primary: '#bdbdbd',
+      primary: '#BDBDBD',
     },
   },
   shape: {
-    borderRadius: 16,
+    borderRadius: 8,
   },
 };
 

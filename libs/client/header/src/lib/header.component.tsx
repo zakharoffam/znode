@@ -10,16 +10,26 @@ import {
   Tooltip,
   Typography
 } from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
 
-const pages = ['Продукты', 'Блог'];
-const settings = ['Профиль', 'Выйти'];
+
+const pages = ['Разработчикам', 'Бизнесу', 'Блог', 'О нас'];
+const settings = ['Войти'];
 
 
 export function Header() {
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
+  const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget);
+  };
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
@@ -28,57 +38,102 @@ export function Header() {
 
   return (
     <AppBar position="static">
-        <Toolbar disableGutters={false} sx={{ backgroundColor: '#000000' }}>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ color: '#FFFFFF', mr: 2, display: { xs: 'none', md: 'flex' } }}
+      <Toolbar disableGutters sx={{ backgroundColor: '#000000', paddingX: 2 }}>
+        <Typography
+          variant="h6"
+          noWrap
+          component="div"
+          sx={{ mr: 2, color: '#FFFFFF', display: { xs: 'none', md: 'flex' } }}
+        >
+          ZNODE
+        </Typography>
+
+        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleOpenNavMenu}
+            color="inherit"
           >
-            ZNODE
-          </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorElNav}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+            open={Boolean(anchorElNav)}
+            onClose={handleCloseNavMenu}
+            sx={{
+              display: { xs: 'block', md: 'none' },
+            }}
+          >
             {pages.map((page) => (
-              <Button
-                key={page}
-                sx={{ color: '#757575', my: 2, display: 'block' }}
-              >
-                {page}
-              </Button>
+              <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">{page}</Typography>
+              </MenuItem>
             ))}
-          </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Пользователь" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+          </Menu>
+        </Box>
+        <Typography
+          variant="h6"
+          noWrap
+          component="div"
+          sx={{ flexGrow: 1, color: '#FFFFFF', display: { xs: 'flex', md: 'none' } }}
+        >
+          ZNODE
+        </Typography>
+        <Box sx={{ flexGrow: 1, marginLeft: 42, display: { xs: 'none', md: 'flex' } }}>
+          {pages.map((page) => (
+            <Button
+              key={page}
+              onClick={handleCloseNavMenu}
+              sx={{ marginY: 2, marginRight: 1, color: '#BDBDBD', display: 'block' }}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-        </Toolbar>
+              {page}
+            </Button>
+          ))}
+        </Box>
+
+        <Box sx={{ flexGrow: 0 }}>
+          <Tooltip title="Привет, Гость!">
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Avatar alt="Z" src="/static/images/avatar.jpg" />
+            </IconButton>
+          </Tooltip>
+          <Menu
+            sx={{ mt: '45px' }}
+            id="menu-appbar"
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+          >
+            {settings.map((setting) => (
+              <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">{setting}</Typography>
+              </MenuItem>
+            ))}
+          </Menu>
+        </Box>
+      </Toolbar>
     </AppBar>
   );
 }

@@ -16,29 +16,28 @@ export class TelegramHelperBotService {
     await ctx.tg.sendMessage(1040890736, 'К боту подключился новый пользователь!');
   }
 
-  // @On('message')
-  // public async messageCommand(ctx: Context) {
-  //   await TeleramUpdateEntity.addRecord(JSON.stringify(ctx.update));
-  //   Logger.log('Новое сообщение!', 'TelegramHelperBotService.messageCommand()');
-  //   await ctx.reply('Привет!');
-  //   await ctx.reply('👋');
-  //   setTimeout(async () => {
-  //     await ctx.reply('Сколько будет 2 + 2?', {
-  //       reply_markup: {
-  //         inline_keyboard: [
-  //           [{ text: '4', callback_data: '4'}],
-  //           [{ text: '8', callback_data: '8'}]
-  //         ]
-  //       }
-  //     })
-  //   }, 1000);
-  // }
+  @On('message')
+  public async messageCommand(ctx: Context) {
+    await TeleramUpdateEntity.addRecord(JSON.stringify(ctx.update));
+    Logger.log('Новое сообщение!', 'TelegramHelperBotService.messageCommand()');
+    await ctx.reply('Привет!');
+    await ctx.reply('👋');
+    setTimeout(async () => {
+      await ctx.reply('Сколько будет 2 + 2?', {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: '4', callback_data: '4'}],
+            [{ text: '8', callback_data: '8'}]
+          ]
+        }
+      })
+    }, 1000);
+  }
 
 
-  @Hears('1')
+  @Hears('ping')
   public async getMe(ctx: Context) {
-    console.log(await ctx.tg.getMe());
-    await ctx.reply('1');
+    await ctx.reply('Пинг просто АГОНЬ!!!');
   }
 
 
@@ -58,6 +57,12 @@ export class TelegramHelperBotService {
           await ctx.reply('Правильно!');
           await ctx.reply('🥳');
         }, 2500);
+        setTimeout(async () => {
+          await ctx.reply('Теперь ты можешь попробовать попинговать меня. ;)');
+        }, 5000);
+        setTimeout(async () => {
+          await ctx.reply('Я запингуюсь если отправить мне команду "ping".');
+        }, 5000);
       } else {
         setTimeout(async () => {
           await ctx.reply('К сожалению это не верный ответ.');

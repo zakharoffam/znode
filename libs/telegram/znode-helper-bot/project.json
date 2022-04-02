@@ -1,20 +1,20 @@
 {
-  "root": "libs/telegram/helper-bot",
-  "sourceRoot": "libs/telegram/helper-bot/src",
+  "root": "libs/telegram/znode-helper-bot",
+  "sourceRoot": "libs/telegram/znode-helper-bot/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/telegram/helper-bot/**/*.ts"]
+        "lintFilePatterns": ["libs/telegram/znode-helper-bot/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/telegram/helper-bot"],
+      "outputs": ["coverage/libs/telegram/znode-helper-bot"],
       "options": {
-        "jestConfig": "libs/telegram/helper-bot/jest.config.js",
+        "jestConfig": "libs/telegram/znode-helper-bot/jest.config.js",
         "passWithNoTests": true
       }
     }

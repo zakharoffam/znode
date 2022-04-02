@@ -31,7 +31,9 @@
         "libs/event-logger/server-module/src/index.ts"
       ],
       "@znode/storage": ["libs/storage/src/index.ts"],
-      "@znode/telegram/helper-bot": ["libs/telegram/helper-bot/src/index.ts"],
+      "@znode/telegram/znode-helper-bot": [
+        "libs/telegram/znode-helper-bot/src/index.ts"
+      ],
       "@znode/users/server-module": ["libs/users/server-module/src/index.ts"]
     }
   },

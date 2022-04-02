@@ -1,5 +1,5 @@
 import { ErrorInterceptor } from "../error-interceptor";
-import { Box, Button, ButtonProps, Grid, styled, Typography } from '@mui/material';
+import { Container, Box, Button, ButtonProps, Grid, styled, Typography } from '@mui/material';
 import { Header } from "@znode/client/header";
 import { yellow } from "@mui/material/colors";
 
@@ -19,8 +19,9 @@ export function HomePage() {
 
   return (
     <ErrorInterceptor appName="Домашняя страница">
-      <Box>
-        <Header />
+      <Header />
+      <Container maxWidth="xl">
+
         <Grid
           container
           spacing={2}
@@ -61,7 +62,7 @@ export function HomePage() {
           </Grid>
         </Grid>
 
-      </Box>
+      </Container>
     </ErrorInterceptor>
   );
 }

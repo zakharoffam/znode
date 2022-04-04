@@ -1,7 +1,6 @@
-import { Injectable, Logger, NestMiddleware, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction } from 'express';
 import { AuthService } from './auth.service';
-import { UserEntity } from "@znode/storage";
 import { Request, Response } from 'express';
 import { UserInterface } from "@znode/common/interfaces";
 
@@ -20,31 +19,27 @@ export class AuthMiddleware implements NestMiddleware {
    * @param next
    */
   async use(req: RequestWithUser, res: Response, next: NextFunction) {
-    const auth = req.headers['Authorization'];
-    Logger.log(auth);
-    if (!auth) {
-      // Если в запросе нет токена авторизации отправим клиента на страницу авторизации
-      throw new UnauthorizedException();
+    let user: UserInterface;
+    const currentAccessToken = req.headers['x-access-token'];
+    if (!currentAccessToken) {
+      user = { email: 'guest@znode.ru', name: 'Гость' };
+      const token = this.authService.encryptJwt(user);
+      res.setHeader('x-access-token', JSON.stringify(token));
+      req.user = user;
+      next();
+    } else {
+      const decodeToken = this.authService.decryptJwt(String(currentAccessToken));
+      if (Date.now() > Date.parse(decodeToken.exp + '000')) {
+        user = { email: 'guest@znode.ru', name: 'Гость' };
+        const token = this.authService.encryptJwt(user);
+        res.setHeader('x-access-token', JSON.stringify(token));
+        req.user = user;
+        next();
+      } else {
+        req.user = decodeToken.user;
+        next();
+      }
     }
-    // Извлечем токен из заголовка авторизации
-    const inputToken = String(auth).replace('Bearer ', '');
-
-    // Расшифруем полученный токен
-    const decodeToken = this.authService.decryptJwt(inputToken);
-    if (!decodeToken?.user?.email) {
-      // Если в расшифрованном токене отсутствуют пользовательские данные токен явно поддельный
-      throw new UnauthorizedException();
-    }
-    let user = decodeToken.user;
-
-    if (Date.now() > Number(String(decodeToken.exp) + '000')) {
-      // Если срок действия токена просрочен, запросим новый токен и пользовательские данные
-      user = await UserEntity.getUserByEmail(decodeToken.user.email);
-      const newToken = this.authService.encryptJwt(user);
-      // Обновим токен клиенту
-      res.setHeader('Authorization', `Bearer ${newToken}`);
-    }
-    req.user = user;
-    next();
   }
+
 }

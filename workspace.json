@@ -3,6 +3,7 @@
   "projects": {
     "auth-server-module": "libs/auth/server-module",
     "client": "apps/client",
+    "client-api": "libs/client/api",
     "client-header": "libs/client/header",
     "common-helpers": "libs/common/helpers",
     "common-interfaces": "libs/common/interfaces",

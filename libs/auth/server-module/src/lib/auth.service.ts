@@ -15,7 +15,6 @@ export interface Token {
 export class AuthService {
   constructor(private jwtService: JwtService) {}
 
-
   /**
    * Проверка адреса электропочты и пароля
    * @param email
@@ -52,6 +51,6 @@ export class AuthService {
    * @param token
    */
   public decryptJwt(token: string): Token {
-    return this.jwtService.verify<Token>(token);
+    return this.jwtService.decode(token) as Token;
   }
 }

@@ -5,7 +5,6 @@ import { join } from 'path';
 import { StorageModule } from '@znode/storage';
 import { AuthModule } from '@znode/auth-server-module';
 import { UsersModule } from "@znode/users/server-module";
-import { EventLoggerModule } from '@znode/event-logger';
 import { ScheduleModule } from "@nestjs/schedule";
 import { TelegramZnodeHelperBotModule } from "@znode/telegram/znode-helper-bot";
 
@@ -17,7 +16,6 @@ import { TelegramZnodeHelperBotModule } from "@znode/telegram/znode-helper-bot";
     }),
     ScheduleModule.forRoot(),
     StorageModule,
-    EventLoggerModule,
     AuthModule,
     UsersModule,
     TelegramZnodeHelperBotModule,

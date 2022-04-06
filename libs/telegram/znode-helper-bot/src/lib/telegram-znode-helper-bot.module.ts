@@ -3,6 +3,7 @@ import { TelegrafModule } from "nestjs-telegraf";
 import { ZnodeHelperBotUpdate } from "./znode-helper-bot.update";
 import { MainScene } from "./scenes/main.scene";
 import { sessionMiddleware } from "./session.middleware";
+import { AdminScene } from "./scenes/admin.scene";
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { sessionMiddleware } from "./session.middleware";
   providers: [
     ZnodeHelperBotUpdate,
     MainScene,
+    AdminScene,
   ],
 })
 export class TelegramZnodeHelperBotModule {}

@@ -7,7 +7,6 @@
     "client-header": "libs/client/header",
     "common-helpers": "libs/common/helpers",
     "common-interfaces": "libs/common/interfaces",
-    "event-logger": "libs/event-logger",
     "server": "apps/server",
     "storage": "libs/storage",
     "telegram-znode-helper-bot": "libs/telegram/znode-helper-bot",

@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
 
+
 export function Error404Page() {
   document.title = 'ZNode - 404';
 

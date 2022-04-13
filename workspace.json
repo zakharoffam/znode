@@ -1,15 +1,11 @@
 {
   "version": 2,
   "projects": {
-    "auth-server-module": "libs/auth/server-module",
     "client": "apps/client",
     "client-api": "libs/client/api",
     "client-header": "libs/client/header",
-    "common-helpers": "libs/common/helpers",
-    "common-interfaces": "libs/common/interfaces",
     "server": "apps/server",
     "storage": "libs/storage",
-    "telegram-znode-helper-bot": "libs/telegram/znode-helper-bot",
-    "users-server-module": "libs/users/server-module"
+    "telegram-znode-helper-bot": "libs/telegram/znode-helper-bot"
   }
 }

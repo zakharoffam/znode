@@ -16,25 +16,8 @@
     "strictPropertyInitialization": false,
     "baseUrl": ".",
     "paths": {
-      "@znode/auth-server-module": ["libs/auth/server-module/src/index.ts"],
-      "@znode/auth-web-pages": ["libs/auth/web-pages/src/index.ts"],
-      "@znode/client/api": ["libs/client/api/src/index.ts"],
-      "@znode/client/header": ["libs/client/header/src/index.ts"],
-      "@znode/common-client-error-interceptor": [
-        "libs/common/client/error-interceptor/src/index.ts"
-      ],
-      "@znode/common/helpers": ["libs/common/helpers/src/index.ts"],
-      "@znode/common/interfaces": ["libs/common/interfaces/src/index.ts"],
-      "@znode/event-log-module": ["libs/event-log/module/src/index.ts"],
-      "@znode/event-log-web-pages": ["libs/event-log/web-pages/src/index.ts"],
-      "@znode/event-logger-server-module": [
-        "libs/event-logger/server-module/src/index.ts"
-      ],
       "@znode/storage": ["libs/storage/src/index.ts"],
-      "@znode/telegram/znode-helper-bot": [
-        "libs/telegram/znode-helper-bot/src/index.ts"
-      ],
-      "@znode/users/server-module": ["libs/users/server-module/src/index.ts"]
+      "@znode/telegram/znode-helper-bot": ["libs/telegram/znode-helper-bot/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

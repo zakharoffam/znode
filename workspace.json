@@ -2,8 +2,6 @@
   "version": 2,
   "projects": {
     "client": "apps/client",
-    "client-api": "libs/client/api",
-    "client-header": "libs/client/header",
     "server": "apps/server",
     "storage": "libs/storage",
     "telegram-znode-helper-bot": "libs/telegram/znode-helper-bot"

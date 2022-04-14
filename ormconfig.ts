@@ -3,7 +3,6 @@ import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 
 /**
  * Конфигурация подключения к СУБД
- * Данная конфигурация используется как для работы в рантайме, так и для работы с TypeORM CLI
  */
 export default ((): TypeOrmModuleOptions  => {
   return {
